@@ -1,0 +1,40 @@
+<mxfile host="65bd71144e">
+    <diagram id="JDz7NABz3YC1GS8c5rN-" name="Page-1">
+        <mxGraphModel dx="340" dy="612" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="180" width="370" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Covid News" style="ellipse;whiteSpace=wrap;html=1;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="310" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Covid regulation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="297.5" y="360" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Helping with shopping" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" parent="1" vertex="1">
+                    <mxGeometry x="382.5" y="210" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Emotional support" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="270" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Group rules" style="ellipse;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="290" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Recruiments" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="360" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Corpus of Corona support groups on social media" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;" parent="1" vertex="1">
+                    <mxGeometry x="275" y="90" width="155" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Jokes" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="220" width="70" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="local gossip" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="280" width="70" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
