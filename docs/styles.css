@@ -223,6 +223,40 @@ li {
   color: var(--muted);
 }
 
+.reading-list {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.reading-list strong {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.reading-list ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.reading-list li + li {
+  margin-top: 0.35rem;
+}
+
+a {
+  color: var(--clay);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.14em;
+}
+
+a:hover {
+  color: #8d4328;
+}
+
 .milestone h3 {
   margin-bottom: 0.55rem;
 }
