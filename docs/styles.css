@@ -1,0 +1,275 @@
+:root {
+  --bg: #f5f2ea;
+  --paper: #fffdf8;
+  --ink: #17352b;
+  --muted: #5d7269;
+  --line: rgba(23, 53, 43, 0.12);
+  --sage: #8ca08e;
+  --clay: #b96546;
+  --sand: #e9dfcf;
+  --shadow: 0 18px 50px rgba(23, 53, 43, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(185, 101, 70, 0.12), transparent 26%),
+    radial-gradient(circle at top right, rgba(140, 160, 142, 0.18), transparent 30%),
+    linear-gradient(180deg, #f7f4ed 0%, var(--bg) 100%);
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.hero {
+  padding: 5rem 1.5rem 3.5rem;
+}
+
+.hero__inner,
+.page {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.hero__inner {
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  padding: 3rem;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(140, 160, 142, 0.16), transparent 24%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(247, 241, 231, 0.98));
+  box-shadow: var(--shadow);
+}
+
+.eyebrow {
+  margin: 0 0 0.9rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 0.97;
+  letter-spacing: -0.03em;
+}
+
+h1 {
+  max-width: 9ch;
+  font-size: clamp(3rem, 8vw, 5.6rem);
+}
+
+h2 {
+  max-width: 15ch;
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+}
+
+h3 {
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.hero__lead,
+.section__lead,
+.hero__meta,
+p,
+li {
+  font-size: 1.02rem;
+}
+
+.hero__lead {
+  max-width: 52rem;
+  color: var(--muted);
+  margin: 1.2rem 0 0;
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.hero__meta span {
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.85);
+  border: 1px solid var(--line);
+}
+
+.page {
+  padding-bottom: 5rem;
+}
+
+.section + .section {
+  margin-top: 4.25rem;
+}
+
+.section__header {
+  margin-bottom: 1.4rem;
+}
+
+.section__lead {
+  margin-top: 0.9rem;
+  max-width: 48rem;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.card {
+  padding: 1.25rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: var(--shadow);
+}
+
+.card--feature {
+  min-height: 100%;
+}
+
+.card p:last-child,
+.card ul:last-child {
+  margin-bottom: 0;
+}
+
+.card ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.card li + li {
+  margin-top: 0.38rem;
+}
+
+.stat {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.stat__value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--clay);
+  line-height: 0.9;
+}
+
+.stat__label {
+  color: var(--muted);
+}
+
+.timeline {
+  display: grid;
+  gap: 1rem;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.timeline__date {
+  padding-top: 0.5rem;
+  font-weight: 800;
+  color: var(--clay);
+}
+
+.timeline__body {
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255, 253, 248, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.timeline__body p {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+}
+
+.milestone h3 {
+  margin-bottom: 0.55rem;
+}
+
+.lecture-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.lecture-card__week {
+  margin: 0 0 0.65rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 980px) {
+  .grid--two,
+  .grid--three,
+  .grid--four,
+  .lecture-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline__item {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .hero {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .hero__inner,
+  .page {
+    width: min(100%, calc(100% - 1rem));
+  }
+
+  .hero__inner {
+    padding: 1.4rem;
+    border-radius: 22px;
+  }
+
+  .section + .section {
+    margin-top: 2.75rem;
+  }
+}
