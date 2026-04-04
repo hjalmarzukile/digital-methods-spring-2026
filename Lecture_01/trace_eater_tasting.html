@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trace Eater Tasting</title>
+  <style>
+    :root {
+      --bg-1: #f6f1e7;
+      --bg-2: #eadfcf;
+      --ink: #18352b;
+      --gold: #e2bc60;
+      --wall: rgba(84, 112, 97, 0.18);
+      --wall-stroke: rgba(24, 53, 43, 0.18);
+      --trace: rgba(255, 250, 241, 0.9);
+      --focus: #d57b5b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(213, 123, 91, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(142, 162, 141, 0.23), transparent 32%),
+        radial-gradient(circle at 22% 84%, rgba(226, 188, 96, 0.13), transparent 28%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      font-family: "Trebuchet MS", "Avenir Next", sans-serif;
+    }
+
+    .world {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .label {
+      position: absolute;
+      top: 28px;
+      left: 32px;
+      z-index: 10;
+      color: var(--ink);
+    }
+
+    .label h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.6vw, 2.7rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .label p {
+      margin: 8px 0 0;
+      max-width: 46ch;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: rgba(24, 53, 43, 0.74);
+    }
+
+    .caption {
+      position: absolute;
+      right: 30px;
+      bottom: 28px;
+      z-index: 10;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(255, 250, 241, 0.66);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      color: rgba(24, 53, 43, 0.72);
+      font-size: 0.92rem;
+    }
+
+    .hud {
+      position: absolute;
+      top: 26px;
+      right: 26px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 10px;
+    }
+
+    .counter {
+      min-width: 86px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 250, 241, 0.72);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      text-align: center;
+      color: var(--ink);
+    }
+
+    .counter strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .counter span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(24, 53, 43, 0.62);
+    }
+
+    .focus-note {
+      position: absolute;
+      left: 32px;
+      bottom: 28px;
+      z-index: 10;
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255, 250, 241, 0.72);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      min-width: 260px;
+      color: var(--ink);
+    }
+
+    .focus-note strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(24, 53, 43, 0.56);
+    }
+
+    .focus-text {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .maze-shell {
+      position: absolute;
+      inset: 11vh 7vw 11vh;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255, 250, 241, 0.42), rgba(255, 250, 241, 0.18)),
+        rgba(255, 250, 241, 0.18);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      box-shadow: 0 22px 70px rgba(24, 53, 43, 0.08);
+      overflow: hidden;
+    }
+
+    .maze {
+      position: absolute;
+      inset: 26px;
+    }
+
+    .cell {
+      position: absolute;
+      border-radius: 14px;
+      background: rgba(255, 250, 241, 0.16);
+      border: 1px solid rgba(24, 53, 43, 0.05);
+      z-index: 1;
+    }
+
+    .wall {
+      position: absolute;
+      border-radius: 999px;
+      background: var(--wall);
+      border: 1px solid var(--wall-stroke);
+      z-index: 2;
+    }
+
+    .trace {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--trace);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(24, 53, 43, 0.08);
+      transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+      z-index: 4;
+    }
+
+    .trace.float {
+      animation: drift 3s ease-in-out infinite;
+    }
+
+    .trace.focused {
+      transform: scale(1.18);
+      box-shadow: 0 0 0 10px rgba(213, 123, 91, 0.12), 0 14px 34px rgba(24, 53, 43, 0.12);
+    }
+
+    .trace.eaten {
+      opacity: 0.05;
+      transform: scale(0.08);
+      filter: blur(5px);
+      animation: none;
+    }
+
+    .runner {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      margin-left: -24px;
+      margin-top: -24px;
+      z-index: 8;
+      pointer-events: none;
+      will-change: transform, left, top;
+    }
+
+    .pacman {
+      position: absolute;
+      inset: 0;
+      filter: drop-shadow(0 10px 18px rgba(24, 53, 43, 0.16));
+    }
+
+    .pacman-body {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .pacman-mouth {
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      clip-path: polygon(50% 50%, 100% 1%, 100% 99%);
+      transform-origin: 50% 50%;
+      z-index: 2;
+      animation: chomp 0.16s linear infinite alternate;
+    }
+
+    .runner.tasting .pacman-mouth {
+      animation-duration: 0.38s;
+    }
+
+    .pacman-eye {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      top: 12px;
+      right: 12px;
+      background: var(--ink);
+      z-index: 3;
+    }
+
+    @keyframes chomp {
+      0% {
+        clip-path: polygon(50% 50%, 100% 1%, 100% 99%);
+      }
+      100% {
+        clip-path: polygon(50% 50%, 100% 34%, 100% 66%);
+      }
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translateY(-6px) rotate(-3deg);
+      }
+      50% {
+        transform: translateY(8px) rotate(3deg);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hud {
+        top: auto;
+        right: 20px;
+        bottom: 120px;
+        grid-template-columns: repeat(2, auto);
+      }
+
+      .focus-note {
+        left: 20px;
+        bottom: 20px;
+        min-width: 220px;
+      }
+
+      .caption {
+        right: 20px;
+        bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="world">
+    <div class="label">
+      <h1>Trace Eater, Tasting Version</h1>
+      <p>Here Pac-Man pauses at each trace before eating it. The pause stands in for interpretation: attention to what a trace means, where it comes from, and how it should be read in context.</p>
+    </div>
+
+    <div class="hud">
+      <div class="counter"><strong id="count-like">0</strong><span>♥ Likes</span></div>
+      <div class="counter"><strong id="count-comment">0</strong><span>💬 Comments</span></div>
+      <div class="counter"><strong id="count-emoji">0</strong><span>🙂 Emojis</span></div>
+      <div class="counter"><strong id="count-hashtag">0</strong><span># Tags</span></div>
+    </div>
+
+    <div class="maze-shell">
+      <div class="maze" id="maze">
+        <div class="runner" id="runner" aria-hidden="true">
+          <div class="pacman">
+            <div class="pacman-body"></div>
+            <div class="pacman-mouth"></div>
+            <div class="pacman-eye"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="focus-note">
+      <strong>Current Reading</strong>
+      <div class="focus-text" id="focus-text">Scanning the maze for a trace to interpret.</div>
+    </div>
+
+    <div class="caption">Pause, read, interpret, then consume.</div>
+  </div>
+
+  <script>
+    const mazeEl = document.getElementById("maze");
+    const runnerEl = document.getElementById("runner");
+    const focusTextEl = document.getElementById("focus-text");
+    const counters = {
+      like: document.getElementById("count-like"),
+      comment: document.getElementById("count-comment"),
+      emoji: document.getElementById("count-emoji"),
+      hashtag: document.getElementById("count-hashtag")
+    };
+
+    const mazeGrid = [
+      "###################",
+      "#........#........#",
+      "#.###.##.#.##.###.#",
+      "#.#....#...#....#.#",
+      "#.#.##.#####.##.#.#",
+      "#...##...#...##...#",
+      "###.####.#.####.###",
+      "#.......P.........#",
+      "###.##.#####.##.###",
+      "#...##...#...##...#",
+      "#.#.##.#.#.#.##.#.#",
+      "#.#....#...#....#.#",
+      "#.###.##.#.##.###.#",
+      "#........#........#",
+      "###################"
+    ];
+
+    const traceCells = [
+      { x: 1, y: 1, symbol: "♥", text: "A like is a small trace of approval, visibility, or low-friction engagement." },
+      { x: 4, y: 1, symbol: "💬", text: "A comment is richer: it can reveal stance, framing, conflict, or interpretation." },
+      { x: 8, y: 1, symbol: "🙂", text: "An emoji compresses affect. Context decides whether it signals warmth, irony, or mockery." },
+      { x: 12, y: 1, symbol: "#", text: "A hashtag links a trace to topic formation, publics, and broader circulation." },
+      { x: 16, y: 1, symbol: "♥", text: "Repeated likes can indicate visibility patterns, but not automatically meaning or motive." },
+      { x: 3, y: 5, symbol: "💬", text: "Individual comments often matter because they anchor interpretation in concrete cases." },
+      { x: 8, y: 5, symbol: "🙂", text: "Emoji use can shift meaning across communities, platforms, and moments." },
+      { x: 15, y: 5, symbol: "#", text: "Hashtags can organize discourse, but only within the specific platform context." },
+      { x: 2, y: 9, symbol: "♥", text: "A single trace is small, but digital methods can still treat it as analytically meaningful." },
+      { x: 10, y: 9, symbol: "💬", text: "Interpretation means asking what this comment does, not just counting that it exists." },
+      { x: 16, y: 9, symbol: "🙂", text: "Close attention to one trace can reveal tone that aggregate metrics would flatten." },
+      { x: 10, y: 13, symbol: "#", text: "The value of a trace depends on how it is situated in a wider socio-technical context." }
+    ];
+
+    const typeBySymbol = {
+      "♥": "like",
+      "💬": "comment",
+      "🙂": "emoji",
+      "#": "hashtag"
+    };
+
+    const counts = { like: 0, comment: 0, emoji: 0, hashtag: 0 };
+    const walkable = new Set();
+    let startCell = { x: 9, y: 7 };
+    let traces = [];
+    let currentTarget = null;
+    let state = "moving";
+    let tastingUntil = 0;
+
+    const pacman = {
+      x: 0,
+      y: 0,
+      cellX: 0,
+      cellY: 0,
+      speed: 135,
+      angle: 0,
+      path: [],
+      pathIndex: 0
+    };
+
+    function renderCounters() {
+      counters.like.textContent = counts.like;
+      counters.comment.textContent = counts.comment;
+      counters.emoji.textContent = counts.emoji;
+      counters.hashtag.textContent = counts.hashtag;
+    }
+
+    function resetCounters() {
+      counts.like = 0;
+      counts.comment = 0;
+      counts.emoji = 0;
+      counts.hashtag = 0;
+      renderCounters();
+    }
+
+    function cellCenter(x, y, cell, offsetX, offsetY) {
+      return {
+        px: offsetX + x * cell + cell / 2,
+        py: offsetY + y * cell + cell / 2
+      };
+    }
+
+    function getMetrics() {
+      return {
+        cell: Number(mazeEl.dataset.cell),
+        offsetX: Number(mazeEl.dataset.offsetX),
+        offsetY: Number(mazeEl.dataset.offsetY)
+      };
+    }
+
+    function renderPacman() {
+      runnerEl.style.left = `${pacman.x}px`;
+      runnerEl.style.top = `${pacman.y}px`;
+      runnerEl.style.transform = `translate(-50%, -50%) rotate(${pacman.angle}rad)`;
+    }
+
+    function buildMaze() {
+      mazeEl.querySelectorAll(".wall,.trace,.cell").forEach((node) => node.remove());
+      walkable.clear();
+
+      const width = mazeEl.clientWidth;
+      const height = mazeEl.clientHeight;
+      const cols = mazeGrid[0].length;
+      const rows = mazeGrid.length;
+      const cell = Math.min(width / cols, height / rows);
+      const offsetX = (width - cell * cols) / 2;
+      const offsetY = (height - cell * rows) / 2;
+
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < cols; x += 1) {
+          const tile = mazeGrid[y][x];
+          if (tile === "#") {
+            const wall = document.createElement("div");
+            wall.className = "wall";
+            wall.style.left = `${offsetX + x * cell + cell * 0.1}px`;
+            wall.style.top = `${offsetY + y * cell + cell * 0.1}px`;
+            wall.style.width = `${cell * 0.8}px`;
+            wall.style.height = `${cell * 0.8}px`;
+            mazeEl.appendChild(wall);
+          } else {
+            walkable.add(`${x},${y}`);
+            const cellNode = document.createElement("div");
+            cellNode.className = "cell";
+            cellNode.style.left = `${offsetX + x * cell + cell * 0.14}px`;
+            cellNode.style.top = `${offsetY + y * cell + cell * 0.14}px`;
+            cellNode.style.width = `${cell * 0.72}px`;
+            cellNode.style.height = `${cell * 0.72}px`;
+            mazeEl.appendChild(cellNode);
+          }
+
+          if (tile === "P") {
+            startCell = { x, y };
+          }
+        }
+      }
+
+      traces = traceCells.map((trace, index) => {
+        const node = document.createElement("div");
+        node.className = "trace float";
+        node.textContent = trace.symbol;
+        const size = Math.max(32, cell * 0.42);
+        node.style.width = `${size}px`;
+        node.style.height = `${size}px`;
+        node.style.left = `${offsetX + trace.x * cell + cell / 2 - size / 2}px`;
+        node.style.top = `${offsetY + trace.y * cell + cell / 2 - size / 2}px`;
+        node.style.fontSize = `${Math.max(16, size * 0.52)}px`;
+        node.style.animationDelay = `${(index % 5) * -0.35}s`;
+        mazeEl.appendChild(node);
+        return { ...trace, type: typeBySymbol[trace.symbol], eaten: false, node };
+      });
+
+      pacman.cellX = startCell.x;
+      pacman.cellY = startCell.y;
+      const { px, py } = cellCenter(startCell.x, startCell.y, cell, offsetX, offsetY);
+      pacman.x = px;
+      pacman.y = py;
+      pacman.path = [];
+      pacman.pathIndex = 0;
+      renderPacman();
+
+      mazeEl.dataset.cell = String(cell);
+      mazeEl.dataset.offsetX = String(offsetX);
+      mazeEl.dataset.offsetY = String(offsetY);
+    }
+
+    function neighbors(x, y) {
+      return [
+        [x + 1, y],
+        [x - 1, y],
+        [x, y + 1],
+        [x, y - 1]
+      ].filter(([nx, ny]) => walkable.has(`${nx},${ny}`));
+    }
+
+    function chooseTarget() {
+      const remaining = traces.filter((trace) => !trace.eaten);
+      if (!remaining.length) {
+        traces.forEach((trace) => {
+          trace.eaten = false;
+          trace.node.classList.remove("eaten", "focused");
+          trace.node.classList.add("float");
+        });
+        resetCounters();
+        return traces[0];
+      }
+
+      let best = remaining[0];
+      let bestDistance = Infinity;
+      for (const trace of remaining) {
+        const dist = Math.abs(trace.x - pacman.cellX) + Math.abs(trace.y - pacman.cellY);
+        if (dist < bestDistance) {
+          bestDistance = dist;
+          best = trace;
+        }
+      }
+      return best;
+    }
+
+    function findPath(startX, startY, endX, endY) {
+      const queue = [[startX, startY]];
+      const cameFrom = new Map();
+      const seen = new Set([`${startX},${startY}`]);
+
+      while (queue.length) {
+        const [x, y] = queue.shift();
+        if (x === endX && y === endY) {
+          const path = [[x, y]];
+          let key = `${x},${y}`;
+          while (cameFrom.has(key)) {
+            const prev = cameFrom.get(key);
+            path.push(prev);
+            key = `${prev[0]},${prev[1]}`;
+          }
+          path.reverse();
+          return path;
+        }
+
+        for (const [nx, ny] of neighbors(x, y)) {
+          const key = `${nx},${ny}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            cameFrom.set(key, [x, y]);
+            queue.push([nx, ny]);
+          }
+        }
+      }
+
+      return [[startX, startY]];
+    }
+
+    function assignNewPath() {
+      traces.forEach((trace) => trace.node.classList.remove("focused"));
+      currentTarget = chooseTarget();
+      currentTarget.node.classList.add("focused");
+      focusTextEl.textContent = currentTarget.text;
+      pacman.path = findPath(pacman.cellX, pacman.cellY, currentTarget.x, currentTarget.y);
+      pacman.pathIndex = 1;
+      state = "moving";
+      runnerEl.classList.remove("tasting");
+    }
+
+    function consumeCurrentTarget() {
+      if (!currentTarget || currentTarget.eaten) {
+        return;
+      }
+      currentTarget.eaten = true;
+      currentTarget.node.classList.remove("focused", "float");
+      currentTarget.node.classList.add("eaten");
+      counts[currentTarget.type] += 1;
+      renderCounters();
+      focusTextEl.textContent = `Interpreted and collected: ${currentTarget.text}`;
+      assignNewPath();
+    }
+
+    function stepPacman(deltaMs, now) {
+      const { cell, offsetX, offsetY } = getMetrics();
+
+      if (state === "tasting") {
+        if (now >= tastingUntil) {
+          consumeCurrentTarget();
+        }
+        renderPacman();
+        return;
+      }
+
+      if (!pacman.path.length || pacman.pathIndex >= pacman.path.length) {
+        assignNewPath();
+      }
+
+      const nextCell = pacman.path[pacman.pathIndex];
+      if (!nextCell) {
+        assignNewPath();
+        return;
+      }
+
+      const { px: targetX, py: targetY } = cellCenter(nextCell[0], nextCell[1], cell, offsetX, offsetY);
+      const dx = targetX - pacman.x;
+      const dy = targetY - pacman.y;
+      const distance = Math.hypot(dx, dy);
+      const step = pacman.speed * (deltaMs / 1000);
+
+      pacman.angle = Math.atan2(dy, dx);
+
+      if (distance <= step) {
+        pacman.x = targetX;
+        pacman.y = targetY;
+        pacman.cellX = nextCell[0];
+        pacman.cellY = nextCell[1];
+        pacman.pathIndex += 1;
+
+        if (currentTarget && currentTarget.x === pacman.cellX && currentTarget.y === pacman.cellY) {
+          state = "tasting";
+          tastingUntil = now + 1300;
+          runnerEl.classList.add("tasting");
+          focusTextEl.textContent = `Pausing to read this trace in context: ${currentTarget.text}`;
+        }
+      } else {
+        pacman.x += (dx / distance) * step;
+        pacman.y += (dy / distance) * step;
+      }
+
+      renderPacman();
+    }
+
+    let lastTime = performance.now();
+
+    function tick(now) {
+      const delta = Math.min(now - lastTime, 32);
+      lastTime = now;
+      stepPacman(delta, now);
+      requestAnimationFrame(tick);
+    }
+
+    window.addEventListener("resize", () => {
+      buildMaze();
+      assignNewPath();
+    });
+
+    buildMaze();
+    resetCounters();
+    assignNewPath();
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>

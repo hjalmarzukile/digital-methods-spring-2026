@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trace Eater Animation</title>
+  <style>
+    :root {
+      --bg-1: #f6f1e7;
+      --bg-2: #eadfcf;
+      --ink: #18352b;
+      --sage: #8ea28d;
+      --moss: #547061;
+      --clay: #d57b5b;
+      --gold: #e2bc60;
+      --cream: rgba(255, 250, 241, 0.74);
+      --wall: rgba(84, 112, 97, 0.18);
+      --wall-stroke: rgba(24, 53, 43, 0.18);
+      --trace: rgba(255, 250, 241, 0.86);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(213, 123, 91, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(142, 162, 141, 0.23), transparent 32%),
+        radial-gradient(circle at 22% 84%, rgba(226, 188, 96, 0.13), transparent 28%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      font-family: "Trebuchet MS", "Avenir Next", sans-serif;
+    }
+
+    body {
+      position: relative;
+    }
+
+    .world {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(24, 53, 43, 0.22) 0 0.6px, transparent 0.7px),
+        radial-gradient(circle at 70% 60%, rgba(24, 53, 43, 0.18) 0 0.6px, transparent 0.7px);
+      background-size: 26px 26px, 31px 31px;
+    }
+
+    .label {
+      position: absolute;
+      top: 28px;
+      left: 32px;
+      z-index: 10;
+      color: var(--ink);
+      mix-blend-mode: multiply;
+    }
+
+    .label h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.8vw, 3rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .label p {
+      margin: 8px 0 0;
+      max-width: 42ch;
+      font-size: 0.98rem;
+      line-height: 1.4;
+      color: rgba(24, 53, 43, 0.72);
+    }
+
+    .maze-shell {
+      position: absolute;
+      inset: 11vh 7vw 11vh;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255, 250, 241, 0.42), rgba(255, 250, 241, 0.18)),
+        rgba(255, 250, 241, 0.18);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      box-shadow: 0 22px 70px rgba(24, 53, 43, 0.08);
+      overflow: hidden;
+    }
+
+    .maze-shell::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 24px;
+      border: 1px solid rgba(24, 53, 43, 0.07);
+      pointer-events: none;
+    }
+
+    .maze {
+      position: absolute;
+      inset: 26px;
+    }
+
+    .cell {
+      position: absolute;
+      border-radius: 14px;
+      background: rgba(255, 250, 241, 0.16);
+      border: 1px solid rgba(24, 53, 43, 0.05);
+      z-index: 1;
+    }
+
+    .cell::after {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(24, 53, 43, 0.14);
+    }
+
+    .pulse-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 38vw;
+      height: 38vw;
+      max-width: 560px;
+      max-height: 560px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      animation: breathe 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .pulse-ring.r2 {
+      width: 58vw;
+      height: 58vw;
+      max-width: 820px;
+      max-height: 820px;
+      animation-delay: -2.6s;
+    }
+
+    .wall {
+      position: absolute;
+      border-radius: 999px;
+      background: var(--wall);
+      border: 1px solid var(--wall-stroke);
+      box-shadow: inset 0 0 0 1px rgba(255, 250, 241, 0.22);
+    }
+
+    .trace {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--trace);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      border-radius: 12px;
+      box-shadow: 0 10px 28px rgba(24, 53, 43, 0.08);
+      transition: opacity 180ms ease, transform 180ms ease, filter 180ms ease;
+      will-change: transform, opacity;
+      z-index: 3;
+    }
+
+    .trace::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 16px;
+      border: 1px dashed rgba(24, 53, 43, 0.08);
+    }
+
+    .trace.float {
+      animation: drift 3s ease-in-out infinite;
+    }
+
+    .trace.eaten {
+      opacity: 0.05;
+      transform: scale(0.08);
+      filter: blur(5px);
+      animation: none;
+    }
+
+    .runner {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      margin-left: -24px;
+      margin-top: -24px;
+      z-index: 8;
+      pointer-events: none;
+      will-change: transform, left, top;
+    }
+
+    .pacman {
+      position: absolute;
+      inset: 0;
+      filter: drop-shadow(0 10px 18px rgba(24, 53, 43, 0.16));
+    }
+
+    .pacman-body {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .pacman-mouth {
+      position: absolute;
+      clip-path: polygon(50% 50%, 100% 8%, 100% 92%);
+      inset: -1px;
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      animation: chomp 0.16s linear infinite alternate;
+      transform-origin: 50% 50%;
+      z-index: 2;
+    }
+
+    .pacman-eye {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      top: 12px;
+      right: 12px;
+      background: var(--ink);
+      z-index: 3;
+    }
+
+    .caption {
+      position: absolute;
+      right: 32px;
+      bottom: 28px;
+      z-index: 10;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(255, 250, 241, 0.62);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      color: rgba(24, 53, 43, 0.72);
+      font-size: 0.92rem;
+    }
+
+    .hud {
+      position: absolute;
+      top: 26px;
+      right: 26px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(4, auto);
+      gap: 10px;
+    }
+
+    .counter {
+      min-width: 86px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 250, 241, 0.72);
+      border: 1px solid rgba(24, 53, 43, 0.08);
+      box-shadow: 0 10px 24px rgba(24, 53, 43, 0.06);
+      text-align: center;
+      color: var(--ink);
+    }
+
+    .counter strong {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .counter span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(24, 53, 43, 0.62);
+    }
+
+    @keyframes chomp {
+      0% {
+        clip-path: polygon(50% 50%, 100% 1%, 100% 99%);
+      }
+      100% {
+        clip-path: polygon(50% 50%, 100% 34%, 100% 66%);
+      }
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translateY(-6px) rotate(-3deg);
+      }
+      50% {
+        transform: translateY(8px) rotate(3deg);
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(0.96);
+        opacity: 0.46;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.04);
+        opacity: 0.14;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .label {
+        top: 20px;
+        left: 20px;
+      }
+
+      .caption {
+        right: 20px;
+        bottom: 20px;
+      }
+
+      .hud {
+        top: auto;
+        right: 20px;
+        bottom: 72px;
+        grid-template-columns: repeat(2, auto);
+      }
+
+      .trace {
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+      }
+
+      .runner {
+        width: 38px;
+        height: 38px;
+        margin-left: -19px;
+        margin-top: -19px;
+      }
+
+      .pacman-eye {
+        top: 10px;
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="world">
+    <div class="grain"></div>
+    <div class="pulse-ring"></div>
+    <div class="pulse-ring r2"></div>
+
+    <div class="label">
+      <h1>Trace Eater</h1>
+      <p>Ambient Pac-Man-style maze animation. The figure changes direction and moves after digital traces as a simple visual metaphor for collecting online traces.</p>
+    </div>
+
+    <div class="hud">
+      <div class="counter"><strong id="count-like">0</strong><span>♥ Likes</span></div>
+      <div class="counter"><strong id="count-comment">0</strong><span>💬 Comments</span></div>
+      <div class="counter"><strong id="count-emoji">0</strong><span>🙂 Emojis</span></div>
+      <div class="counter"><strong id="count-hashtag">0</strong><span># Tags</span></div>
+    </div>
+
+    <div class="maze-shell">
+      <div class="maze" id="maze">
+        <div class="runner" id="runner" aria-hidden="true">
+          <div class="pacman">
+            <div class="pacman-body"></div>
+            <div class="pacman-mouth"></div>
+            <div class="pacman-eye"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="caption">Autonomous animation. No game controls.</div>
+  </div>
+
+  <script>
+    const mazeEl = document.getElementById("maze");
+    const runnerEl = document.getElementById("runner");
+    const counters = {
+      like: document.getElementById("count-like"),
+      comment: document.getElementById("count-comment"),
+      emoji: document.getElementById("count-emoji"),
+      hashtag: document.getElementById("count-hashtag")
+    };
+
+    const mazeGrid = [
+      "###################",
+      "#........#........#",
+      "#.###.##.#.##.###.#",
+      "#.#....#...#....#.#",
+      "#.#.##.#####.##.#.#",
+      "#...##...#...##...#",
+      "###.####.#.####.###",
+      "#.......P.........#",
+      "###.##.#####.##.###",
+      "#...##...#...##...#",
+      "#.#.##.#.#.#.##.#.#",
+      "#.#....#...#....#.#",
+      "#.###.##.#.##.###.#",
+      "#........#........#",
+      "###################"
+    ];
+
+    const traceSymbols = ["♥", "💬", "🙂", "#", "♥", "💬", "#", "🙂", "♥", "💬", "🙂", "#"];
+    const traceCells = [
+      [1, 1], [4, 1], [8, 1], [12, 1], [16, 1],
+      [3, 5], [8, 5], [15, 5],
+      [2, 9], [10, 9], [16, 9],
+      [10, 13]
+    ];
+
+    const traceTypeBySymbol = {
+      "♥": "like",
+      "💬": "comment",
+      "🙂": "emoji",
+      "#": "hashtag"
+    };
+
+    const walls = [];
+    const walkable = new Set();
+    const counts = { like: 0, comment: 0, emoji: 0, hashtag: 0 };
+    let startCell = { x: 9, y: 7 };
+    let traces = [];
+    let currentTarget = null;
+
+    const pacman = {
+      x: 0,
+      y: 0,
+      cellX: 0,
+      cellY: 0,
+      speed: 150,
+      angle: 0,
+      path: [],
+      pathIndex: 0
+    };
+
+    function buildMaze() {
+      mazeEl.querySelectorAll(".wall,.trace,.cell").forEach((node) => node.remove());
+      walls.length = 0;
+      walkable.clear();
+
+      const width = mazeEl.clientWidth;
+      const height = mazeEl.clientHeight;
+      const cols = mazeGrid[0].length;
+      const rows = mazeGrid.length;
+      const cell = Math.min(width / cols, height / rows);
+      const offsetX = (width - cell * cols) / 2;
+      const offsetY = (height - cell * rows) / 2;
+
+      for (let y = 0; y < rows; y += 1) {
+        for (let x = 0; x < cols; x += 1) {
+          const tile = mazeGrid[y][x];
+          if (tile === "#") {
+            const wall = document.createElement("div");
+            wall.className = "wall";
+            wall.style.left = `${offsetX + x * cell + cell * 0.1}px`;
+            wall.style.top = `${offsetY + y * cell + cell * 0.1}px`;
+            wall.style.width = `${cell * 0.8}px`;
+            wall.style.height = `${cell * 0.8}px`;
+            mazeEl.appendChild(wall);
+            walls.push(wall);
+          } else {
+            walkable.add(`${x},${y}`);
+            const cellNode = document.createElement("div");
+            cellNode.className = "cell";
+            cellNode.style.left = `${offsetX + x * cell + cell * 0.14}px`;
+            cellNode.style.top = `${offsetY + y * cell + cell * 0.14}px`;
+            cellNode.style.width = `${cell * 0.72}px`;
+            cellNode.style.height = `${cell * 0.72}px`;
+            mazeEl.appendChild(cellNode);
+          }
+
+          if (tile === "P") {
+            startCell = { x, y };
+          }
+        }
+      }
+
+      traces = traceCells.map(([x, y], index) => {
+        const node = document.createElement("div");
+        node.className = "trace float";
+        node.textContent = traceSymbols[index % traceSymbols.length];
+        node.dataset.x = x;
+        node.dataset.y = y;
+        const size = Math.max(32, cell * 0.42);
+        node.style.width = `${size}px`;
+        node.style.height = `${size}px`;
+        node.style.left = `${offsetX + x * cell + cell / 2 - size / 2}px`;
+        node.style.top = `${offsetY + y * cell + cell / 2 - size / 2}px`;
+        node.style.fontSize = `${Math.max(16, size * 0.52)}px`;
+        node.style.animationDelay = `${(index % 5) * -0.35}s`;
+        mazeEl.appendChild(node);
+        return {
+          x,
+          y,
+          eaten: false,
+          symbol: traceSymbols[index % traceSymbols.length],
+          type: traceTypeBySymbol[traceSymbols[index % traceSymbols.length]],
+          node
+        };
+      });
+
+      pacman.cellX = startCell.x;
+      pacman.cellY = startCell.y;
+      const { px, py } = cellCenter(startCell.x, startCell.y, cell, offsetX, offsetY);
+      pacman.x = px;
+      pacman.y = py;
+      pacman.path = [];
+      pacman.pathIndex = 0;
+      renderPacman();
+
+      mazeEl.dataset.cell = String(cell);
+      mazeEl.dataset.offsetX = String(offsetX);
+      mazeEl.dataset.offsetY = String(offsetY);
+    }
+
+    function renderCounters() {
+      counters.like.textContent = String(counts.like);
+      counters.comment.textContent = String(counts.comment);
+      counters.emoji.textContent = String(counts.emoji);
+      counters.hashtag.textContent = String(counts.hashtag);
+    }
+
+    function resetCounters() {
+      counts.like = 0;
+      counts.comment = 0;
+      counts.emoji = 0;
+      counts.hashtag = 0;
+      renderCounters();
+    }
+
+    function cellCenter(x, y, cell, offsetX, offsetY) {
+      return {
+        px: offsetX + x * cell + cell / 2,
+        py: offsetY + y * cell + cell / 2
+      };
+    }
+
+    function getMetrics() {
+      return {
+        cell: Number(mazeEl.dataset.cell),
+        offsetX: Number(mazeEl.dataset.offsetX),
+        offsetY: Number(mazeEl.dataset.offsetY)
+      };
+    }
+
+    function renderPacman() {
+      runnerEl.style.left = `${pacman.x}px`;
+      runnerEl.style.top = `${pacman.y}px`;
+      runnerEl.style.transform = `translate(-50%, -50%) rotate(${pacman.angle}rad)`;
+    }
+
+    function neighbors(x, y) {
+      return [
+        [x + 1, y],
+        [x - 1, y],
+        [x, y + 1],
+        [x, y - 1]
+      ].filter(([nx, ny]) => walkable.has(`${nx},${ny}`));
+    }
+
+    function chooseTarget() {
+      const remaining = traces.filter((trace) => !trace.eaten);
+      if (!remaining.length) {
+        traces.forEach((trace) => {
+          trace.eaten = false;
+          trace.node.classList.remove("eaten");
+          trace.node.classList.add("float");
+        });
+        resetCounters();
+        return traces[0];
+      }
+
+      const reachable = remaining.filter((trace) => walkable.has(`${trace.x},${trace.y}`));
+      const pool = reachable.length ? reachable : remaining;
+
+      let best = pool[0];
+      let bestDistance = Infinity;
+      for (const trace of pool) {
+        const dist = Math.abs(trace.x - pacman.cellX) + Math.abs(trace.y - pacman.cellY);
+        if (dist < bestDistance) {
+          bestDistance = dist;
+          best = trace;
+        }
+      }
+      return best;
+    }
+
+    function findPath(startX, startY, endX, endY) {
+      const queue = [[startX, startY]];
+      const cameFrom = new Map();
+      const seen = new Set([`${startX},${startY}`]);
+
+      while (queue.length) {
+        const [x, y] = queue.shift();
+        if (x === endX && y === endY) {
+          const path = [[x, y]];
+          let key = `${x},${y}`;
+          while (cameFrom.has(key)) {
+            const prev = cameFrom.get(key);
+            path.push(prev);
+            key = `${prev[0]},${prev[1]}`;
+          }
+          path.reverse();
+          return path;
+        }
+
+        for (const [nx, ny] of neighbors(x, y)) {
+          const key = `${nx},${ny}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            cameFrom.set(key, [x, y]);
+            queue.push([nx, ny]);
+          }
+        }
+      }
+
+      return [[startX, startY]];
+    }
+
+    function assignNewPath() {
+      currentTarget = chooseTarget();
+      let attempts = 0;
+      let path = findPath(pacman.cellX, pacman.cellY, currentTarget.x, currentTarget.y);
+
+      while (path.length <= 1 && attempts < traces.length) {
+        currentTarget.eaten = true;
+        currentTarget.node.classList.add("eaten");
+        currentTarget.node.classList.remove("float");
+        currentTarget = chooseTarget();
+        path = findPath(pacman.cellX, pacman.cellY, currentTarget.x, currentTarget.y);
+        attempts += 1;
+      }
+
+      pacman.path = path;
+      pacman.pathIndex = 1;
+    }
+
+    function eatTraceAtCell(x, y) {
+      const trace = traces.find((item) => item.x === x && item.y === y && !item.eaten);
+      if (!trace) {
+        return;
+      }
+      trace.eaten = true;
+      trace.node.classList.add("eaten");
+      trace.node.classList.remove("float");
+      counts[trace.type] += 1;
+      renderCounters();
+    }
+
+    function stepPacman(deltaMs) {
+      const { cell, offsetX, offsetY } = getMetrics();
+      if (!pacman.path.length || pacman.pathIndex >= pacman.path.length) {
+        assignNewPath();
+      }
+
+      const nextCell = pacman.path[pacman.pathIndex];
+      if (!nextCell) {
+        assignNewPath();
+        return;
+      }
+
+      const { px: targetX, py: targetY } = cellCenter(nextCell[0], nextCell[1], cell, offsetX, offsetY);
+      const dx = targetX - pacman.x;
+      const dy = targetY - pacman.y;
+      const distance = Math.hypot(dx, dy);
+      const step = pacman.speed * (deltaMs / 1000);
+
+      pacman.angle = Math.atan2(dy, dx);
+
+      if (distance <= step) {
+        pacman.x = targetX;
+        pacman.y = targetY;
+        pacman.cellX = nextCell[0];
+        pacman.cellY = nextCell[1];
+        pacman.pathIndex += 1;
+        eatTraceAtCell(pacman.cellX, pacman.cellY);
+        if (currentTarget && currentTarget.x === pacman.cellX && currentTarget.y === pacman.cellY) {
+          assignNewPath();
+        }
+      } else {
+        pacman.x += (dx / distance) * step;
+        pacman.y += (dy / distance) * step;
+      }
+
+      renderPacman();
+    }
+
+    let lastTime = performance.now();
+
+    function tick(now) {
+      const delta = Math.min(now - lastTime, 32);
+      lastTime = now;
+      stepPacman(delta);
+      requestAnimationFrame(tick);
+    }
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        buildMaze();
+      }, 100);
+    });
+
+    buildMaze();
+    resetCounters();
+    assignNewPath();
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>

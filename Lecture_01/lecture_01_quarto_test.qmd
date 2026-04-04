@@ -1,0 +1,440 @@
+---
+title: "The What, Why, and How of (Mixed) Digital Methods"
+subtitle: "Digital Methods Lecture 1"
+author: "Hjalmar Bang Carlsen"
+format:
+  revealjs:
+    theme:
+      - default
+      - lecture_01_quarto_test.scss
+    slide-number: true
+    controls: true
+    progress: true
+    transition: slide
+    center: false
+    preview-links: auto
+    footer: "Digital Methods, Spring 2026"
+    chalkboard: false
+    navigation-mode: linear
+editor: visual
+---
+
+## {.center}
+
+::: {.deck-frame .center-stack}
+::: {.section-mark}
+Lecture 01
+:::
+
+# Digital methods become useful when traces become research questions
+
+::: {.lead}
+This lecture frames the course around one practical idea: how to turn digital traces into a defensible mixed-methods project.
+:::
+
+::: {.small}
+Course responsible: Hjalmar Bang Carlsen, Associate Professor, SODAS
+:::
+:::
+
+## Team support makes the course work {.smaller}
+
+::: {.deck-frame}
+::: {.eyebrow}
+Teaching team
+:::
+
+::: {.mini-grid}
+::: {.card}
+<div class="card-title">Julie Hvidsteen</div>
+hsl448@sodas.ku.dk
+:::
+
+::: {.card}
+<div class="card-title">Csilla Duray</div>
+cd@plen.ku.dk
+:::
+
+::: {.card}
+<div class="card-title">Mihaela Capriean</div>
+xbk406@sodas.ku.dk
+:::
+:::
+
+::: {.card style="margin-top:0.7rem;"}
+<div class="card-title">Why this matters</div>
+Exercises, milestone feedback, and supervision are built around project development, not just lecture content.
+:::
+:::
+
+## The lecture has four jobs {.smaller}
+
+::: {.deck-frame}
+::: {.eyebrow}
+Roadmap
+:::
+
+::: {.mini-grid}
+::: {.stat-card}
+::: {.number}
+01
+:::
+<div class="card-title">Start with the end</div>
+Frame the course around the final project.
+:::
+
+::: {.stat-card}
+::: {.number}
+02
+:::
+<div class="card-title">Define digital methods</div>
+Clarify what counts as digital in data, method, and analysis.
+:::
+
+::: {.stat-card}
+::: {.number}
+03
+:::
+<div class="card-title">Define mixed methods</div>
+Show why digital work often needs both qual and quant moves.
+:::
+:::
+
+::: {.card style="margin-top:0.7rem;"}
+<div class="card-title">Final move</div>
+Explain how the course is organized as a research collective that helps projects take shape.
+:::
+:::
+
+## The course is built around one project {.smaller}
+
+::: {.deck-frame}
+::: {.hero-grid}
+::: {.stack}
+<div class="statement-title">The exam is a 25-page mixed digital methods project</div>
+
+::: {.support}
+Students collect digital data, answer a self-chosen research question, and combine qualitative and quantitative analysis.
+:::
+:::
+
+::: {.card}
+<div class="card-title">The project should include</div>
+- a clear research design
+- a datasite and data collection strategy
+- qualitative analysis
+- quantitative analysis
+- integration across methods
+:::
+:::
+:::
+
+## The exam rewards integration, not separate mini-studies {.smaller}
+
+::: {.deck-frame}
+::: {.eyebrow}
+Exam focus
+:::
+
+::: {.trace-row}
+::: {.trace-item}
+::: {.icon}
+◎
+:::
+Research design
+:::
+
+::: {.trace-item}
+::: {.icon}
+◌
+:::
+Netnography
+:::
+
+::: {.trace-item}
+::: {.icon}
+◍
+:::
+Qualitative text analysis
+:::
+
+::: {.trace-item}
+::: {.icon}
+◐
+:::
+Simple quantitative analysis
+:::
+:::
+
+::: {.card style="margin-top:0.8rem;"}
+<div class="card-title">The key standard</div>
+The strongest projects do not place qual and quant side by side. They make them inform each other.
+:::
+:::
+
+## A good project has a recognisable structure {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.card}
+<div class="card-title">Must-haves</div>
+- datasite description informed by netnography
+- data collection account
+- research design
+- qualitative text analysis
+- quantitative text analysis
+- validated computational classification
+:::
+
+::: {.card}
+<div class="card-title">Typical paper architecture</div>
+1. Introduction  
+2. Background and datasite  
+3. Theory and literature  
+4. Design  
+5. Data collection  
+6. Methods  
+7. Analysis  
+8. Conclusion
+:::
+:::
+:::
+
+## Good projects turn a concrete case into an analytical question {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.stack}
+<div class="statement-title">Example: “Incels and Extremism”</div>
+
+::: {.support}
+Research question: *What tenets in incel culture resemble the structure of extremist ideology?*
+:::
+
+::: {.small}
+The point of the example is not the topic itself. It is the design logic connecting question, concept, data, and analysis.
+:::
+:::
+
+::: {.image-card}
+![](image-3.png)
+:::
+:::
+:::
+
+## A convincing project connects datasite and collection strategy {.smaller}
+
+::: {.deck-frame}
+::: {.image-split}
+::: {.image-card}
+![](image-2.png)
+:::
+
+::: {.image-card}
+![](image-4.png)
+:::
+:::
+:::
+
+## Mixed work means patterns and passages must speak to each other {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.quote-card}
+<div class="card-title">Qualitative evidence</div>
+> “I am the worst of the worst. I don’t deserve to mate and breed.”
+
+This kind of passage gives interpretive depth that a pattern alone cannot supply.
+:::
+
+::: {.image-card}
+![](image-5.png)
+:::
+:::
+:::
+
+## Digital methods begin with digital traces {.smaller}
+
+::: {.deck-frame}
+::: {.hero-grid}
+::: {.stack}
+<div class="statement-title">Digital methods repurpose platform traces as research data</div>
+
+::: {.support}
+The object is not “the internet” in general. The object is the traces, rankings, links, metadata, and interactions generated inside specific media environments.
+:::
+:::
+
+::: {.card}
+<div class="card-title">Four examples of traces</div>
+- likes and reactions
+- comments and replies
+- hashtags and links
+- rankings, recommendations, and metrics
+:::
+:::
+:::
+
+## Digital methods also learn from the medium itself {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.card}
+<div class="card-title">The method point</div>
+Platforms already sort, rank, recommend, cluster, and connect content.
+
+Digital methods learn from those built-in operations instead of treating them as irrelevant noise.
+:::
+
+::: {.image-card}
+![](image.png)
+:::
+:::
+:::
+
+## Digital methods interpret patterns rather than stopping at them {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.image-card}
+![](image-7.png)
+:::
+
+::: {.image-card}
+![](image-6.png)
+:::
+:::
+
+::: {.card style="margin-top:0.7rem;"}
+<div class="card-title">Core move</div>
+Quantitative patterns become useful when they are interpreted as medium-specific social formations.
+:::
+:::
+
+## Mixed methods matter because digital data are mixed already {.smaller}
+
+::: {.deck-frame}
+::: {.concept-grid}
+::: {.stat-card}
+<div class="card-title">In terms of data</div>
+Digital material can be qualitative in form and quantitative in scale.
+:::
+
+::: {.stat-card}
+<div class="card-title">In terms of methods</div>
+Projects often need both contextual observation and scalable collection.
+:::
+:::
+
+::: {.card style="margin-top:0.7rem;"}
+<div class="card-title">In terms of analysis</div>
+Interpretive and statistical work both become weaker when they are isolated from each other.
+:::
+:::
+
+## Mixed digital methods combine three things at once {.smaller}
+
+::: {.deck-frame}
+::: {.trace-row}
+::: {.trace-item}
+::: {.icon}
+01
+:::
+Repurpose and combine qualitative and quantitative digital traces
+:::
+
+::: {.trace-item}
+::: {.icon}
+02
+:::
+Combine methods such as netnography and web scraping
+:::
+
+::: {.trace-item}
+::: {.icon}
+03
+:::
+Combine interpretive and analytical forms of computer-assisted analysis
+:::
+
+::: {.trace-item}
+::: {.icon}
+⇄
+:::
+Make the three layers inform each other
+:::
+:::
+:::
+
+## The point is not better platform engineering {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.stack}
+<div class="statement-title">The goal is to investigate wider cultural dynamics</div>
+
+::: {.support}
+Digital methods use medium-specific operations to study public life, discourse, organization, and social worlds. They do not aim to optimize the platforms themselves.
+:::
+:::
+
+::: {.quote-card}
+<div class="card-title">Practical warning</div>
+If a project only collects platform data without asking what those traces mean in context, it stops too early.
+:::
+:::
+:::
+
+## The course treats the class as a research collective {.smaller}
+
+::: {.deck-frame}
+::: {.hero-grid}
+::: {.stack}
+<div class="statement-title">The lecture course is designed to help projects mature in public</div>
+
+::: {.support}
+The class works as a collective, while exercise groups function as topical clusters made up of smaller independent project teams.
+:::
+:::
+
+::: {.image-card}
+![](image-11.png)
+:::
+:::
+:::
+
+## Weekly routines keep projects moving {.smaller}
+
+::: {.deck-frame}
+::: {.two-col}
+::: {.card}
+<div class="card-title">Exercise classes</div>
+- one-slide update every Tuesday
+- group work on milestones
+- feedback on project development
+- occasional small methods exercises
+:::
+
+::: {.card}
+<div class="card-title">Supervision sessions</div>
+- six sessions per group
+- 25 minutes each
+- short progress update plus current challenge
+- focused help on design and analysis
+:::
+:::
+:::
+
+## The first takeaway is simple {.center}
+
+::: {.deck-frame .center-stack}
+::: {.section-mark}
+Takeaway
+:::
+
+# A strong mixed digital methods project links traces, context, and interpretation
+
+::: {.lead}
+That is the standard the rest of the course will keep returning to.
+:::
+:::
