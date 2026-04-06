@@ -276,6 +276,47 @@ a:hover {
   text-transform: uppercase;
 }
 
+.block-header {
+  padding: 0.55rem 1.1rem;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.block-header--exam {
+  background: var(--clay);
+}
+
+.milestone-row {
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.8rem 1.2rem;
+  background: rgba(185, 101, 70, 0.07);
+  border: 1px solid rgba(185, 101, 70, 0.22);
+  border-radius: 18px;
+}
+
+.milestone-row__label {
+  font-weight: 800;
+  font-size: 0.83rem;
+  color: var(--clay);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.timeline__body--supervision {
+  background: rgba(140, 160, 142, 0.1);
+  border-color: rgba(140, 160, 142, 0.3);
+}
+
 @media (max-width: 980px) {
   .grid--two,
   .grid--three,
@@ -287,6 +328,10 @@ a:hover {
   .timeline__item {
     grid-template-columns: 1fr;
     gap: 0.4rem;
+  }
+
+  .milestone-row {
+    grid-template-columns: 1fr;
   }
 
   .hero {
