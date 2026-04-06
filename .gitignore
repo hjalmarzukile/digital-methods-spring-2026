@@ -1,0 +1,6 @@
+# Ignore everything at root level
+/*
+
+# Except the website and this file
+!/docs
+!.gitignore
