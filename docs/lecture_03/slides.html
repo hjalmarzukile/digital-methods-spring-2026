@@ -1,0 +1,1513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Digital Methods — Lecture 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="deck-stage.js"></script>
+<style>
+
+  :root{
+    --ivory: #f6f1e7;
+    --paper: #faf6ec;
+    --ink: #17140f;
+    --ink-2: #2a241c;
+    --muted: #6b6358;
+    --muted-2: #8d8578;
+    --rule: #d9d1bf;
+    --rule-2: #e8e1cf;
+    --terra: #b0472a;
+    --terra-deep: #8a3519;
+    --terra-soft: #e9c6b5;
+    --dark: #1a160f;
+    --dark-soft: #2a241c;
+  }
+  html,body{margin:0;padding:0;background:#000;}
+  body{font-family:'Inter',sans-serif;}
+
+  /* Slides */
+  .slide{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide.dark{ background: var(--dark); color: #ece5d3; }
+  .slide.dark .rule{ border-color: rgba(255,255,255,0.18); }
+  .slide.dark .muted{ color: rgba(236,229,211,0.62); }
+  .slide.dark .eyebrow{ color: var(--terra-soft); }
+
+  /* Frame */
+  .frame{
+    position:absolute; inset:0;
+    padding: 110px 140px 110px 140px;
+    display:flex; flex-direction:column;
+    box-sizing:border-box;
+  }
+
+  /* Top header */
+  .tophdr{
+    position:absolute; top: 60px; left: 140px; right: 140px;
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .tophdr .rule-line{
+    flex:1; height:1px; background: var(--rule); margin: 0 22px; align-self:center;
+  }
+  .slide.dark .tophdr{ color: rgba(236,229,211,0.55); }
+  .slide.dark .tophdr .rule-line{ background: rgba(255,255,255,0.18); }
+
+  /* Page number */
+  .pageno{
+    position:absolute; bottom: 48px; right: 140px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--muted-2);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+  }
+  .slide.dark .pageno{ color: rgba(236,229,211,0.45); }
+
+  .pageno-mark{
+    position:absolute; bottom: 48px; left: 140px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--muted-2);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .slide.dark .pageno-mark{ color: rgba(236,229,211,0.45); }
+
+  /* Typography */
+  h1, h2, h3, .serif{ font-family: 'Source Serif 4', 'Source Serif Pro', Georgia, serif; font-weight: 400; }
+  h1{ font-size: 96px; line-height: 1.04; letter-spacing: -0.02em; font-weight: 400; margin: 0; }
+  h2{ font-size: 68px; line-height: 1.08; letter-spacing: -0.015em; font-weight: 400; margin: 0 0 0 0; }
+  h3{ font-size: 44px; line-height: 1.15; letter-spacing: -0.01em; font-weight: 500; margin: 0; }
+
+  .eyebrow{
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--terra);
+  }
+
+  .lede{
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 40px;
+    line-height: 1.3;
+    font-weight: 300;
+    color: var(--ink-2);
+  }
+
+  .body{
+    font-size: 30px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 1400px;
+  }
+
+  .muted{ color: var(--muted); }
+
+  .em{ color: var(--terra); font-style: normal; }
+  em.em{ font-style: italic; color: var(--terra-deep); }
+
+  strong{ font-weight: 600; color: var(--ink); }
+
+  .footnote{
+    position:absolute; bottom: 48px; left: 420px; right: 220px;
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    line-height: 1.4;
+    color: var(--muted-2);
+    font-weight: 400;
+    text-align: center;
+  }
+  .footnote em{ font-style: italic; }
+
+  /* Rules */
+  .rule{ border:0; border-top: 1px solid var(--rule); margin: 0; }
+  .rule-thick{ border:0; border-top: 2px solid var(--ink); margin: 0; }
+
+  /* Title slide */
+  .title-slide{ background: var(--paper); }
+  .title-slide .frame{ justify-content: space-between; padding: 110px 140px 110px 140px; }
+  .title-slide h1{ font-size: 130px; line-height: 1.02; font-weight: 300; letter-spacing: -0.025em; max-width: 1500px; }
+  .title-slide h1 em{ color: var(--terra); font-style: italic; font-weight: 400; }
+
+  /* Lists */
+  ul.clean{ list-style:none; padding:0; margin:0; }
+  ul.clean li{
+    padding: 18px 0;
+    border-top: 1px solid var(--rule-2);
+    display:grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  ul.clean li:last-child{ border-bottom: 1px solid var(--rule-2); }
+  ul.clean .num{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--terra);
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    padding-top: 8px;
+  }
+  ul.clean .txt{ font-size: 30px; line-height: 1.4; color: var(--ink-2); }
+  ul.clean .txt strong{ font-family: 'Source Serif 4', Georgia, serif; font-weight: 500; font-size: 32px; color: var(--ink); }
+
+  /* Two column */
+  .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 100px; }
+  .three-col{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 80px; }
+
+  /* Bullet simple */
+  .bullets{ list-style:none; padding:0; margin:0; }
+  .bullets li{
+    padding-left: 32px;
+    position:relative;
+    margin-bottom: 20px;
+    font-size: 28px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .bullets li:before{
+    content: '—';
+    position:absolute; left:0;
+    color: var(--terra);
+    font-weight: 300;
+  }
+
+  /* Dash bullets tight */
+  .bullets-s li{ font-size: 26px; margin-bottom: 14px; }
+
+  /* Labels (tiny caps) */
+  .label{
+    font-family:'Inter',sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--terra);
+  }
+
+  /* Section header slide */
+  .section-slide{ background: var(--dark); color: #ece5d3; }
+  .section-slide .frame{ justify-content: flex-end; padding-bottom: 160px; }
+  .section-slide .eyebrow{ color: var(--terra-soft); }
+  .section-slide h1{ font-size: 140px; font-weight: 300; color: #f4eed9; letter-spacing: -0.025em; max-width: 1400px; }
+  .section-slide h1 em{ color: var(--terra-soft); font-style: italic; font-weight: 400; }
+  .section-slide .numeral{
+    position:absolute;
+    top: 140px; right: 140px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 340px;
+    line-height: 0.85;
+    color: rgba(236,229,211,0.08);
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    user-select:none;
+  }
+  .section-slide .sub{
+    margin-top: 40px;
+    font-family:'Inter',sans-serif;
+    font-size: 26px;
+    color: rgba(236,229,211,0.72);
+    max-width: 1100px;
+    line-height: 1.5;
+  }
+
+  /* Exercise card */
+  .exercise{
+    border: 2px solid var(--ink);
+    padding: 64px 72px;
+    background: var(--paper);
+    position: relative;
+  }
+  .exercise .ex-label{
+    position:absolute; top:-14px; left: 44px;
+    background: var(--paper);
+    padding: 0 16px;
+    font-family:'Inter',sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--terra);
+  }
+  .exercise h3{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 60px;
+    margin: 0 0 32px 0;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* Process steps */
+  .process{
+    display:flex; align-items:stretch; gap: 0;
+    margin-top: 40px;
+  }
+  .process .step{
+    flex:1;
+    padding: 40px 24px 36px 24px;
+    border-top: 2px solid var(--ink);
+    position:relative;
+  }
+  .process .step .n{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--terra);
+    letter-spacing: 0.1em;
+  }
+  .process .step .label-l{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 34px;
+    line-height: 1.15;
+    font-weight: 500;
+    margin-top: 18px;
+    letter-spacing: -0.01em;
+  }
+  .process .step.active .label-l{ color: var(--terra); }
+  .process .step.muted .n,
+  .process .step.muted .label-l{ color: var(--muted-2); }
+  .process .step.muted{ border-top-color: var(--rule); }
+
+  /* Quote slide */
+  .quote-slide blockquote{
+    margin:0;
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 62px;
+    line-height: 1.22;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    max-width: 1500px;
+  }
+  .quote-slide .open-q{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 240px;
+    line-height: 0.8;
+    color: var(--terra);
+    font-weight: 400;
+    margin-bottom: 20px;
+    display:block;
+    position: absolute;
+    top: 200px;
+    left: 140px;
+  }
+  .quote-slide cite{
+    display:block;
+    margin-top: 48px;
+    font-family:'Inter',sans-serif;
+    font-size: 22px;
+    color: var(--muted);
+    font-style: normal;
+    letter-spacing: 0.08em;
+  }
+
+  /* Image placeholder */
+  .imgph{
+    border: 1px solid var(--rule);
+    background:
+      repeating-linear-gradient(135deg, transparent 0 20px, rgba(176,71,42,0.04) 20px 21px),
+      var(--ivory);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .imgph .imgph-inner{
+    text-align:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .imgph .imgph-inner .dim{
+    margin-top: 14px;
+    color: var(--muted-2);
+    font-size: 24px;
+  }
+
+  /* Key-value grid */
+  .kv{ display:grid; grid-template-columns: 280px 1fr; gap: 32px 48px; align-items:baseline; }
+  .kv .k{
+    font-family:'Inter',sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--terra);
+    padding-top: 10px;
+  }
+  .kv .v{ font-size: 26px; line-height: 1.45; color: var(--ink-2); }
+  .kv .v strong{ font-family:'Source Serif 4', Georgia, serif; font-weight: 500; font-size: 28px; }
+
+  /* Small stat figure */
+  .fig-big{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 180px;
+    line-height: 0.9;
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    color: var(--terra);
+  }
+
+  /* Header big */
+  .page-head{ margin-bottom: 60px; }
+  .page-head .eyebrow{ margin-bottom: 20px; display:block; }
+  .page-head h2{ max-width: 1500px; }
+  .page-head .deck-under{ width: 80px; height: 2px; background: var(--ink); margin-top: 36px; }
+
+  /* Check marks */
+  .check{ color: var(--terra); font-weight: 600; }
+  .tilde{ color: var(--muted); }
+
+  /* Table-ish */
+  .eval-row{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .eval-row .item{
+    padding: 22px 0;
+    border-top: 1px solid var(--rule-2);
+    display:grid;
+    grid-template-columns: 240px 1fr 80px;
+    gap: 40px;
+    align-items: baseline;
+  }
+  .eval-row .item:last-child{ border-bottom: 1px solid var(--rule-2); }
+  .eval-row .item .lab{ font-family:'Source Serif 4',Georgia,serif; font-size: 28px; font-weight: 500; }
+  .eval-row .item .desc{ font-size: 24px; color: var(--muted); }
+  .eval-row .item .mark{ font-family:'JetBrains Mono', monospace; font-size: 24px; color: var(--terra); text-align: right; white-space: nowrap; }
+
+  /* Journal entry */
+  .journal{
+    background: var(--ivory);
+    padding: 48px 56px;
+    border-left: 3px solid var(--terra);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 24px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .journal p{ margin: 0 0 18px 0; }
+  .journal p:last-child{ margin: 0; }
+  .journal .meta{ font-family:'Inter',sans-serif; font-size: 24px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--terra); font-weight:600; margin-bottom: 14px; }
+  .journal .tag{ font-family:'Inter',sans-serif; font-size: 24px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra); font-weight: 600; display:inline-block; margin-right: 10px; }
+
+  /* Q column */
+  .q-card{
+    padding: 36px 36px 36px 36px;
+    border-top: 3px solid var(--ink);
+  }
+  .q-card .q-num{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--terra);
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+  .q-card .q-title{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 36px;
+    line-height: 1.15;
+    font-weight: 500;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  .q-card .q-body{ font-size: 24px; line-height: 1.5; color: var(--muted); }
+
+  /* Tasks */
+  .tasks{ list-style:none; padding:0; margin:0; }
+  .tasks li{
+    padding: 26px 0;
+    border-top: 1px solid var(--rule-2);
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap: 32px;
+    align-items: baseline;
+  }
+  .tasks li:last-child{ border-bottom: 1px solid var(--rule-2); }
+  .tasks .n{ font-family:'JetBrains Mono', monospace; font-size: 24px; color: var(--terra); letter-spacing: 0.12em; font-variant-numeric: tabular-nums; padding-top: 6px;}
+  .tasks .t{ font-family:'Source Serif 4', Georgia, serif; font-size: 40px; font-weight: 400; letter-spacing: -0.01em; }
+
+  /* Milestone card (dark) */
+  .ms{
+    background: var(--dark);
+    color: #ece5d3;
+    padding: 72px 80px;
+    position:relative;
+  }
+  .ms .ms-label{
+    font-family:'Inter',sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--terra-soft);
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .ms h3{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 72px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: #f4eed9;
+    margin-bottom: 12px;
+  }
+  .ms .due{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 26px;
+    color: var(--terra-soft);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+  .ms .ms-body{ font-size: 26px; color: rgba(236,229,211,0.8); line-height: 1.5; }
+  .ms .ms-body p{ margin: 0 0 16px 0; }
+  .ms .ms-body strong{ color: #f4eed9; font-family:'Source Serif 4', Georgia, serif; font-weight: 500; font-size: 30px; display:block; margin-bottom: 4px; }
+
+  /* Small separator dot */
+  .dot{ display:inline-block; width:4px; height:4px; border-radius:50%; background: var(--muted); vertical-align: middle; margin: 0 14px; position:relative; top:-5px; }
+
+  /* Column card */
+  .col-card{
+    padding-top: 24px;
+    border-top: 2px solid var(--ink);
+  }
+  .col-card .col-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 24px;
+    color: var(--terra);
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+  }
+  .col-card h4{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0 0 22px 0;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .col-card .bullets li{ font-size: 24px; margin-bottom: 14px; line-height: 1.45;}
+
+  /* Misc */
+  .hint{ font-family:'Inter', sans-serif; font-style: italic; color: var(--muted); font-size: 26px; }
+  .serif-italic{ font-family:'Source Serif 4', Georgia, serif; font-style: italic; }
+
+  /* Hero stat in quote */
+  .pullout{
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+    display:grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    font-size: 24px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .pullout strong{ display:block; font-family:'Source Serif 4', Georgia, serif; font-size: 28px; color: var(--ink); font-weight: 500; margin-bottom: 6px;}
+
+  /* Hide page number on section + title */
+  .no-pageno .pageno, .no-pageno .pageno-mark, .no-pageno .tophdr{ display:none; }
+
+  /* Utility for the speaker line */
+  .speaker{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size: 26px;
+    color: var(--ink-2);
+    line-height: 1.4;
+  }
+  .speaker .name{ font-weight: 500; }
+  .speaker .email{ font-family:'JetBrains Mono', monospace; font-size: 18px; color: var(--muted); letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+<section class="slide title-slide no-pageno" data-label="Title">
+<div class="frame">
+<div>
+<div class="eyebrow" style="font-size:24px;">Digital Methods · Lecture 3</div>
+</div>
+<div>
+<h1>Finding,<br/>evaluating &amp;<br/>selecting <em>data sites</em></h1>
+</div>
+<div style="display:flex; justify-content:space-between; align-items:flex-end;">
+<div class="speaker">
+<div class="name" style="font-size:32px;">Hjalmar Bang Carlsen</div>
+<div class="muted" style="font-size:26px; margin-top:6px;">Associate Professor · SODAS</div>
+<div style="font-family:'JetBrains Mono',monospace; font-size:24px; color: var(--muted); margin-top:14px; letter-spacing:0.04em;">hc@sodas.ku.dk</div>
+</div>
+<div style="text-align:right; font-family:'JetBrains Mono',monospace; font-size:24px; letter-spacing:0.1em; color: var(--muted); line-height:1.5;">
+        LECTURE 03<br/>
+<span style="color: var(--muted-2);">UNIVERSITY OF COPENHAGEN</span>
+</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-label="Recap">
+<div class="tophdr">
+<span>Digital Methods · L3</span>
+<span class="rule-line"></span>
+<span>Recap</span>
+</div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Last time</span>
+<h2>Research questions &amp;<br/>mixed designs.</h2>
+</div>
+<ul class="clean" style="max-width:1500px;">
+<li>
+<span class="num">01</span>
+<span class="txt"><strong>Case your topic</strong> into theoretically relevant objects.</span>
+</li>
+<li>
+<span class="num">02</span>
+<span class="txt"><strong>Formulate your research question</strong> to require both quantitative <em class="em">and</em> qualitative evidence.</span>
+</li>
+<li>
+<span class="num">03</span>
+<span class="txt"><strong>Use</strong> a <em class="em">sequential mixed methods design</em>.</span>
+</li>
+</ul>
+<div class="hint" style="margin-top:60px;">Today we build on that scouting.</div>
+</div>
+<div class="pageno-mark">I · Recap</div>
+<div class="pageno">02</div>
+</section>
+
+<section class="slide" data-label="Today">
+<div class="tophdr"><span>Digital Methods · L3</span><span class="rule-line"></span><span>Agenda</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Today</span>
+<h2>Five tasks.</h2>
+</div>
+<ul class="tasks" style="max-width:1500px;">
+<li><span class="n">01</span><span class="t">Find datasites</span></li>
+<li><span class="n">02</span><span class="t">Scout within datasite</span></li>
+<li><span class="n">03</span><span class="t">Evaluate datasites</span></li>
+<li><span class="n">04</span><span class="t">Select datasites</span></li>
+<li><span class="n">05</span><span class="t">Milestone 1</span></li>
+</ul>
+</div>
+<div class="pageno-mark">Agenda</div>
+<div class="pageno">03</div>
+</section>
+
+<section class="slide section-slide no-pageno" data-label="Section">
+<div class="numeral">I</div>
+<div class="frame">
+<div>
+<span class="eyebrow">Part One</span>
+<h1 style="margin-top:28px; line-height:1.2;">Finding <em>datasites</em> —<br/>from <em>topic</em> to <em>search strategy</em>.</h1>
+</div>
+</div>
+</section>
+
+<section class="slide" data-label="Investigation">
+<div class="tophdr"><span>Part I</span><span class="rule-line"></span><span>The process</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">The investigation process</span>
+<h2>Five steps.</h2>
+</div>
+<div class="process">
+<div class="step active"><div class="n">01</div><div class="label-l">Simplification<br/>&amp; Search</div></div>
+<div class="step active"><div class="n">02</div><div class="label-l">Scouting</div></div>
+<div class="step active"><div class="n">03</div><div class="label-l">Evaluation</div></div>
+<div class="step active"><div class="n">04</div><div class="label-l">Selection</div></div>
+<div class="step active"><div class="n">05</div><div class="label-l">Milestone 1</div></div>
+</div>
+<div class="body" style="margin-top:90px; max-width:1300px;">
+      The process is <em class="em">iterative</em> — initial results refine your search terms, which generate new results, which reshape what you scout for.
+  </div>
+</div>
+<div class="pageno-mark">Part I</div>
+<div class="pageno">04</div>
+</section>
+
+<section class="slide" data-label="Simplification">
+<div class="tophdr"><span>Part I · 01–02</span><span class="rule-line"></span><span>Method</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Simplification &amp; Search</span>
+<h2>Do not just paste your topic<br/>into a search engine.</h2>
+</div>
+<div class="body" style="max-width:1400px; margin-bottom:40px;">Think about how to find a <em class="em">lead</em>. Four strategies:</div>
+<ul class="clean" style="max-width:1500px;">
+<li><span class="num">01</span><span class="txt"><strong>Topical words</strong> → sites → actors</span></li>
+<li><span class="num">02</span><span class="txt">Follow <strong>topical actors</strong> → words → sites</span></li>
+<li><span class="num">03</span><span class="txt"><strong>Known platforms &amp; places</strong> — search within them</span></li>
+<li><span class="num">04</span><span class="txt">Ask a <strong>chatbot</strong> for rapid discovery</span></li>
+</ul>
+</div>
+<div class="footnote">Kozinets, R.V. (2020). <em>Netnography</em>, Ch. 8. SAGE.</div>
+<div class="pageno-mark">Part I · 01–02</div>
+<div class="pageno">05</div>
+</section>
+
+<section class="slide" data-label="Example">
+<div class="tophdr"><span>Part I · Example</span><span class="rule-line"></span><span>Prepping</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Worked example · Prepping communities</span>
+<h2>Build a search list from the<br/>vocabulary the community uses.</h2>
+</div>
+<div class="two-col" style="margin-top: 20px;">
+<div class="col-card">
+<div class="col-label">TERMS FOR THE PHENOMENON</div>
+<div class="serif-italic" style="font-size:26px; line-height:1.6; color:var(--ink-2);">
+          prepping · survivalism · emergency<br/>preparedness · SHTF · homesteading · bugging out
+      </div>
+</div>
+<div class="col-card">
+<div class="col-label">TERMS FOR COMMUNITY SETTINGS</div>
+<div class="serif-italic" style="font-size:26px; line-height:1.6; color:var(--ink-2);">
+          forum · community · group · subreddit
+      </div>
+</div>
+</div>
+<div class="body" style="margin-top:70px;">
+      Regional &amp; linguistic modifiers extend the list further. <span class="hint">Use a chatbot to expand vocabulary beyond academic language.</span>
+</div>
+</div>
+<div class="footnote">Kozinets (2020) <em>Netnography</em>, Ch. 8 · Blok, Bang Carlsen &amp; Albris (2022) <em>Quali-Quantitative Digital Methods</em>, Ch. 3.</div>
+<div class="pageno-mark">Example</div>
+<div class="pageno">06</div>
+</section>
+
+<section class="slide" data-label="Example">
+<div class="tophdr"><span>Part I · Example</span><span class="rule-line"></span><span>Prepping</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">What the search returns</span>
+<h2>The phenomenon distributes<br/>across multiple platforms.</h2>
+</div>
+<div class="kv" style="max-width:1500px;">
+<div class="k">Reddit</div><div class="v">r/preppers · r/survival · r/Survivalism</div>
+<div class="k">YouTube</div><div class="v">Canadian Prepper · City Prepping · The Prepared Homestead</div>
+<div class="k">Dedicated forums</div><div class="v">SurvivalistBoards.com · PrepperForums.net</div>
+<div class="k">Alt. platforms</div><div class="v">MeWe</div>
+</div>
+<hr class="rule" style="margin-top:60px;"/>
+<div class="body" style="margin-top:40px; max-width:1500px;">
+<strong>Key insight.</strong> Each platform has different <em class="em">affordances</em>, user populations and data profiles. The search step should tell you about the <em class="em">shape</em> of the phenomenon online.
+  </div>
+</div>
+<div class="pageno-mark">Example</div>
+<div class="pageno">07</div>
+</section>
+
+<section class="slide" data-label="Example">
+<div class="tophdr"><span>Part I · Example</span><span class="rule-line"></span><span>Platform map</span></div>
+<div class="frame">
+<div class="page-head">
+</div>
+<table style="width:100%; border-collapse:collapse; margin-top:26px; table-layout:fixed; font-size:18px; line-height:1.25; color:var(--ink-2);">
+<thead>
+<tr>
+<th style="text-align:left; padding:10px 12px; border-bottom:2px solid var(--rule); width:21%; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--terra);">Category</th>
+<th style="text-align:left; padding:10px 12px; border-bottom:2px solid var(--rule); width:21%; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--terra);">Forum / Platform</th>
+<th style="text-align:left; padding:10px 12px; border-bottom:2px solid var(--rule); width:18%; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--terra);">Type of interaction</th>
+<th style="text-align:left; padding:10px 12px; border-bottom:2px solid var(--rule); width:40%; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--terra);">Key features</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="4" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Direct clones</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AITAH</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Same format as AITA; explicit verdicts.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AmITheButtface</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Softer language; same moral evaluation structure.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/amiwrong</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Focus on correctness rather than morality.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AmItheIdiot</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Emphasis on competence and stupidity.</td>
+</tr>
+<tr>
+<td rowspan="4" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Spin-offs &amp; variants</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AmIOverreacting</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment (emotions)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Evaluates whether reactions are justified.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AmITheDevil</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment (extreme cases)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Highlights clearly immoral behavior.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/AmItheKameena</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment (cultural variant)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Indian cultural framing of AITA-style dilemmas.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/choosemyalignment</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Judgment (gamified)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Uses moral alignment categories.</td>
+</tr>
+<tr>
+<td rowspan="2" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Adjacent (advice + judgment)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/relationships</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Advice + implicit judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Relationship dilemmas with moral evaluation embedded in advice.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>r/relationship_advice</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Advice + implicit judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Similar format with strong normative commentary.</td>
+</tr>
+<tr>
+<td rowspan="2" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Advice column equivalents</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Dear Prudence (Slate)</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Expert + audience judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Narrative dilemmas with explicit moral framing.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Ask Amy</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Expert judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Traditional advice column format.</td>
+</tr>
+<tr>
+<td rowspan="2" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Q&amp;A platforms</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Quora</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Mixed (advice/judgment)</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">“Was I wrong?” questions; variable quality of moral reasoning.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Stack Exchange</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Structured Q&amp;A</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Less moral focus; still scenario-based evaluation.</td>
+</tr>
+<tr>
+<td rowspan="2" style="padding:10px 12px; border-bottom:1px solid var(--rule-2); vertical-align:top; font-weight:600; color:var(--ink);">Confession / story platforms</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Whisper</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Implicit judgment</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Anonymous confessions; moral evaluation in comments.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);"><strong>Tumblr</strong></td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Story + discourse</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">Narratives with distributed moral reactions.</td>
+</tr>
+<tr>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2); font-weight:600; color:var(--ink);">Conceptual category</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">—</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">—</td>
+<td style="padding:10px 12px; border-bottom:1px solid var(--rule-2);">“Judgment forums”, “crowdsourced morality”, “verdict-based communities”.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pageno-mark">Example</div>
+<div class="pageno">08</div>
+</section>
+
+<section class="slide section-slide no-pageno" data-label="Scouting">
+<div class="numeral">II</div>
+<div class="frame">
+<div>
+<span class="eyebrow">Part Two</span>
+<h1 style="margin-top:28px;">Scouting.</h1>
+</div>
+</div>
+</section>
+
+<section class="slide" data-label="Two">
+<div class="tophdr"><span>Part I · 03</span><span class="rule-line"></span><span>Scouting</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Scouting has two goals</span>
+<h2>Exploration, learning,<br/>observation, and selection.</h2>
+</div>
+<div class="two-col" style="margin-top:20px;">
+<div class="col-card">
+<div class="col-label">01 · EXPLORATION, LEARNING &amp; OBSERVATION</div>
+<h4>Netnography in action.</h4>
+<ul class="bullets">
+<li>Seek deeper cultural understanding.</li>
+<li>Emotional &amp; intellectual engagement with your data sites.</li>
+<li>Record observations, screenshots, notes, reflections.</li>
+<li>These become the beginning of your <em class="em">immersion journal</em>.</li>
+</ul>
+</div>
+<div class="col-card">
+<div class="col-label">02 · GROUNDS FOR DATASITE SELECTION</div>
+<h4>Selection through observation.</h4>
+<ul class="bullets">
+<li>Systematic observation to ground case selection.</li>
+<li>Use scouting to justify why one datasite is better than another.</li>
+<li>Build a defensible basis for evaluation and selection.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnote">Kozinets, R.V. (2020). <em>Netnography</em>, Ch. 8. SAGE.</div>
+<div class="pageno-mark">Part I · 03</div>
+<div class="pageno">09</div>
+</section>
+
+<section class="slide" data-label="Observational">
+<div class="tophdr"><span>Part I · 03</span><span class="rule-line"></span><span>The template</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">The observational template</span>
+<h2>Five Types of Questions<br/>to your datasite</h2>
+</div>
+<div class="body" style="max-width:1500px; margin-bottom:24px;">
+      Unguided scouting produces inconsistent records. A structured template guides observation — file each one in your immersion journal.
+  </div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">01</span><span class="txt"><strong>Site profile</strong> — what is this site and who runs it?</span></li>
+<li><span class="num">02</span><span class="txt"><strong>Community profile</strong> — who are the people here?</span></li>
+<li><span class="num">03</span><span class="txt"><strong>Data inventory</strong> — what data does the site produce, and in what form?</span></li>
+<li><span class="num">04</span><span class="txt"><strong>Theoretical relevance</strong> — what can you study here that you cannot study elsewhere?</span></li>
+<li><span class="num">05</span><span class="txt"><strong>Practical &amp; ethical feasibility</strong> — can you collect this data, and should you?</span></li>
+</ul>
+</div>
+<div class="footnote">Blok, Bang Carlsen &amp; Albris (2022). <em>How to Conduct Quali-Quantitative Digital Methods Research</em>, Ch. 3.</div>
+<div class="pageno-mark">The template</div>
+<div class="pageno">10</div>
+</section>
+
+<section class="slide" data-label="Template">
+<div class="tophdr"><span>Template · 01–02</span><span class="rule-line"></span><span>Site · Community</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Template · 01 &amp; 02</span>
+<h2>Site profile &amp; community profile.</h2>
+</div>
+<div class="two-col" style="margin-top: 20px;">
+<div class="col-card">
+<div class="col-label">01 · SITE PROFILE — what is this place?</div>
+<ul class="bullets bullets-s">
+<li>What is its stated purpose? What does it actually do?</li>
+<li>Who owns or operates it, and what are their interests?</li>
+<li>How is content organised and moderated?</li>
+<li>How do users join, produce and consume content?</li>
+</ul>
+</div>
+<div class="col-card">
+<div class="col-label">02 · COMMUNITY PROFILE — who is here?</div>
+<ul class="bullets bullets-s">
+<li>What can you infer about demographics, geography, expertise?</li>
+<li>How long has the community existed? Growing or declining?</li>
+<li>Subgroups, factions, internal conflicts?</li>
+<li>Shared vocabulary, norms, recognised authorities?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="pageno-mark">Template</div>
+<div class="pageno">11</div>
+</section>
+
+<section class="slide" data-label="Template">
+<div class="tophdr"><span>Template · 03</span><span class="rule-line"></span><span>Data inventory</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Template · 03</span>
+<h2>Data inventory.</h2>
+<div class="body" style="margin-top:28px; max-width:1500px;">What kinds of data does the site produce, and in what form?</div>
+</div>
+<div class="eval-row" style="max-width:1700px;">
+<div class="item">
+<div class="lab">Text data</div>
+<div class="desc">length · depth · format · openness of the text field</div>
+<div class="mark">T</div>
+</div>
+<div class="item">
+<div class="lab">Relational data</div>
+<div class="desc">replies · mentions · follows · co-participation in threads</div>
+<div class="mark">R</div>
+</div>
+<div class="item">
+<div class="lab">Actor data</div>
+<div class="desc">user profiles · posting histories · membership roles</div>
+<div class="mark">A</div>
+</div>
+<div class="item">
+<div class="lab">Activity data</div>
+<div class="desc">timestamps · upvotes · posting frequency · behavioural traces</div>
+<div class="mark">Ac</div>
+</div>
+<div class="item">
+<div class="lab">Metadata</div>
+<div class="desc">thread structures · tags · moderation logs · community flairs</div>
+<div class="mark">M</div>
+</div>
+</div>
+<div class="hint" style="margin-top:48px;">The data inventory is the bridge between site evaluation and your analytical strategy.</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Template</div>
+<div class="pageno">12</div>
+</section>
+
+<section class="slide" data-label="Template">
+<div class="tophdr"><span>Template · 04–05</span><span class="rule-line"></span><span>Relevance · Feasibility</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Template · 04 &amp; 05</span>
+<h2>Theoretical relevance &amp;<br/>practical feasibility.</h2>
+</div>
+<div class="two-col" style="margin-top:20px;">
+<div class="col-card">
+<div class="col-label">04 · THEORETICAL RELEVANCE</div>
+<h4>What can this site do<br/>for your research?</h4>
+<ul class="bullets bullets-s">
+<li>What aspects of your phenomenon are visible here?</li>
+<li>What is this site a <em class="em">good case for</em>?</li>
+<li>What could you learn here that would be hard to learn elsewhere?</li>
+</ul>
+</div>
+<div class="col-card">
+<div class="col-label">05 · FEASIBILITY — practical &amp; ethical</div>
+<h4>Can you actually proceed?</h4>
+<ul class="bullets bullets-s">
+<li>Is the site publicly accessible, or does it require membership?</li>
+<li>Is API access available — and under what terms?</li>
+<li>What ethical issues does the site raise? <span class="hint">(addressed below)</span></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Template</div>
+<div class="pageno">13</div>
+</section>
+
+<section class="slide" data-label="Exercise">
+<div class="tophdr"><span>Exercise · 01</span><span class="rule-line"></span><span>Scouting</span></div>
+<div class="frame" style="justify-content:center;">
+<div class="exercise">
+<div class="ex-label">Exercise · 01</div>
+<h3>Scout a datasite.</h3>
+<div class="body" style="max-width:1500px; margin-bottom: 32px;">
+        In groups, work through the first three template components for one candidate site:
+    </div>
+<ul class="clean">
+<li><span class="num">01</span><span class="txt"><strong>Site profile</strong> — what is it, who runs it, how does it work?</span></li>
+<li><span class="num">02</span><span class="txt"><strong>Community profile</strong> — who is here, what is the culture?</span></li>
+<li><span class="num">03</span><span class="txt"><strong>Data inventory</strong> — what kinds of data does it produce?</span></li>
+</ul>
+<div class="hint" style="margin-top:36px;">Record your observations as your first immersion journal entry.</div>
+</div>
+</div>
+<div class="pageno-mark">Exercise 01</div>
+<div class="pageno">14</div>
+</section>
+
+<section class="slide section-slide no-pageno" data-label="Section">
+<div class="numeral">II</div>
+<div class="frame">
+<div>
+<span class="eyebrow">Part Two</span>
+<h1 style="margin-top:28px;"><em>Evaluating</em><br/>datasites.</h1>
+<div class="sub">Three questions to answer for every site you scout.</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-label="Three">
+<div class="tophdr"><span>Part II</span><span class="rule-line"></span><span>Framework</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Three questions · every candidate site</span>
+<h2>Site · Data · Fit.</h2>
+</div>
+<div class="three-col" style="margin-top:40px;">
+<div class="q-card">
+<div class="q-num">Q 01</div>
+<div class="q-title">Is this a good site?</div>
+<div class="q-body">Site and community quality.</div>
+</div>
+<div class="q-card">
+<div class="q-num">Q 02</div>
+<div class="q-title">Does it produce the right data?</div>
+<div class="q-body">Data quality, by type.</div>
+</div>
+<div class="q-card">
+<div class="q-num">Q 03</div>
+<div class="q-title">Does it let you study what you want?</div>
+<div class="q-body">Fit between site and phenomenon.</div>
+</div>
+</div>
+<hr class="rule" style="margin-top:70px;"/>
+<div class="body" style="margin-top:36px; max-width:1500px;">
+      Together, these questions may also reveal that your <em class="em">research question needs adjustment</em>.
+  </div>
+</div>
+<div class="footnote">Kozinets (2020) · Venturini, Jacomy &amp; Jensen (2018) · Blok, Bang Carlsen &amp; Albris (2022).</div>
+<div class="pageno-mark">Part II</div>
+<div class="pageno">15</div>
+</section>
+
+<section class="slide" data-label="Q1">
+<div class="tophdr"><span>Part II · Q 01</span><span class="rule-line"></span><span>Good site?</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Question 01 · Is this a good site?</span>
+<h2>Five qualitative criteria.</h2>
+<div class="body" style="margin-top:24px; max-width:1500px;">They can fail <em class="em">independently</em> of each other.</div>
+</div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">01</span><span class="txt"><strong>Relevance</strong> — genuinely organised around your phenomenon?</span></li>
+<li><span class="num">02</span><span class="txt"><strong>Activity</strong> — are people actively producing content? Is the community alive?</span></li>
+<li><span class="num">03</span><span class="txt"><strong>Interactivity</strong> — do members interact, or is it mainly broadcast?</span></li>
+<li><span class="num">04</span><span class="txt"><strong>Diversity</strong> — a range of perspectives, identities, forms of engagement?</span></li>
+<li><span class="num">05</span><span class="txt"><strong>Richness</strong> — does the text give enough context for meaningful interpretation?</span></li>
+</ul>
+</div>
+<div class="footnote">Kozinets (2020)</div>
+<div class="pageno-mark">Part II · Q 01</div>
+<div class="pageno">16</div>
+</section>
+
+<section class="slide" data-label="Q2">
+<div class="tophdr"><span>Part II · Q 02</span><span class="rule-line"></span><span>Right data?</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Question 02 · Right data?</span>
+<h2>Four data types.</h2>
+</div>
+<div class="eval-row" style="max-width:1700px;">
+<div class="item" style="grid-template-columns: 230px 1fr 250px; gap: 20px;">
+<div class="lab">Text data</div>
+<div class="desc">How long and open-ended are posts? How much context is embedded in the text?</div>
+<div class="mark" style="font-size:20px; text-align:left;">depth · variance · context</div>
+</div>
+<div class="item" style="grid-template-columns: 230px 1fr 250px; gap: 20px;">
+<div class="lab">Relational data</div>
+<div class="desc">What ties does the platform encode? Are they persistent or fleeting?</div>
+<div class="mark" style="font-size:20px; text-align:left;">strength · durability · coverage</div>
+</div>
+<div class="item" style="grid-template-columns: 230px 1fr 250px; gap: 20px;">
+<div class="lab">Actor data</div>
+<div class="desc">Can you reconstruct individual histories? Are roles visible?</div>
+<div class="mark" style="font-size:20px; text-align:left;">background · role · coverage</div>
+</div>
+<div class="item" style="grid-template-columns: 230px 1fr 250px; gap: 20px;">
+<div class="lab">Activity data</div>
+<div class="desc">Can behavioural traces be linked to external events?</div>
+<div class="mark" style="font-size:20px; text-align:left;">meaning · time</div>
+</div>
+</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Part II · Q 02</div>
+<div class="pageno">17</div>
+</section>
+
+<section class="slide" data-label="Q3">
+<div class="tophdr"><span>Part II · Q 03</span><span class="rule-line"></span><span>Fit?</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Question 03 · Does it fit the phenomenon?</span>
+<h2>A technically good site can<br/>still be a poor fit.</h2>
+</div>
+<div class="two-col" style="margin-top: 30px;">
+<div class="col-card">
+<div class="col-label">WARNING SIGNS</div>
+<ul class="bullets bullets-s">
+<li>Most of the phenomenon happens <em class="em">off-platform</em>.</li>
+<li>Your operationalisation does not map onto platform practices.</li>
+</ul>
+</div>
+<div class="col-card">
+<div class="col-label">FOUR QUESTIONS</div>
+<ul class="bullets bullets-s">
+<li>How much of the study object actually occurs here?</li>
+<li>Is your operationalisation attuned to the <em class="em">formats &amp; practices</em> of the medium?</li>
+<li>Does the phenomenon spill across platforms?</li>
+<li>What does your corpus <em class="em">represent</em> — and exclude?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnote">Venturini, Jacomy &amp; Jensen (2018). A reality check-list for digital methods. <em>New Media &amp; Society</em>, 20(11).</div>
+<div class="pageno-mark">Part II · Q 03</div>
+<div class="pageno">18</div>
+</section>
+
+<section class="slide quote-slide" data-label="Quote">
+<div class="tophdr"><span>Part II</span><span class="rule-line"></span><span>Quote</span></div>
+<div class="frame" style="justify-content:center; padding-left:300px;">
+<span class="open-q">“</span>
+<blockquote>
+      Working with secondary data, you do not have the leisure to define your objects of study as you wish, but you are <span style="color:var(--terra);">obliged to consider</span> the way in which they are formatted by the technical and organisational standards of the medium.
+    </blockquote>
+<cite style="font-size:24px;">— VENTURINI, JACOMY &amp; JENSEN · 2018</cite>
+<div class="pullout">
+<div><strong>Too theory-driven</strong>Mismatch between theory and data.</div>
+<div><strong>Too practice-driven</strong>Risk of analytical irrelevance.</div>
+</div>
+<div class="hint" style="margin-top:36px;">Resolve creatively — using <em class="em">heuristics</em>.</div>
+</div>
+<div class="pageno-mark">Part II</div>
+<div class="pageno">19</div>
+</section>
+
+<section class="slide" data-label="Example">
+<div class="tophdr"><span>Part II · Example</span><span class="rule-line"></span><span>Prepping</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Worked example · r/preppers</span>
+<h2>A full evaluation.</h2>
+</div>
+<div class="two-col" style="margin-top: 20px; gap: 80px;">
+<div>
+<div class="col-card" style="margin-bottom: 42px;">
+<div class="col-label">Q 01 · IS IT A GOOD SITE?</div>
+<div style="font-family:'Source Serif 4', Georgia, serif; font-size: 24px; line-height: 2; color: var(--ink-2);">
+            Relevance <span class="check">✓</span>   Activity <span class="check">✓</span>   Interactivity <span class="check">✓</span><br/>
+            Diversity <span class="check">✓</span>   Richness <span class="tilde">~</span> <span class="hint" style="font-size:24px;">(varies by thread)</span>
+</div>
+</div>
+<div class="col-card">
+<div class="col-label">Q 02 · RIGHT DATA?</div>
+<div style="font-family:'Source Serif 4', Georgia, serif; font-size: 24px; line-height: 2; color: var(--ink-2);">
+            Text <span class="check">✓</span>   Relational traces <span class="check">✓</span><br/>
+            Actor histories <span class="check">✓</span>   Activity data <span class="check">✓</span>
+</div>
+</div>
+</div>
+<div class="col-card">
+<div class="col-label">Q 03 · DOES IT LET YOU STUDY WHAT YOU WANT?</div>
+<ul class="bullets bullets-s">
+<li>Reddit captures <em class="em">discourse breadth</em> but underrepresents experienced preppers who use dedicated forums.</li>
+<li>"A prepper" needs careful operationalisation — activity threshold? how to handle ironic posts?</li>
+<li>The phenomenon spills across platforms — YouTube, Reddit and forums each capture a different dimension.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Example</div>
+<div class="pageno">20</div>
+</section>
+
+<section class="slide" data-label="Adapting">
+<div class="tophdr"><span>Part II</span><span class="rule-line"></span><span>Iteration</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">When site &amp; question disagree</span>
+<h2>Adapting your<br/>research question.</h2>
+<div class="body" style="margin-top:28px; max-width:1500px;">
+        Evaluation may reveal the best available site does not perfectly match your original question. Three options:
+    </div>
+</div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">01</span><span class="txt"><strong>Find a better site.</strong> Keep scouting.</span></li>
+<li><span class="num">02</span><span class="txt"><strong>Adapt the RQ.</strong> Narrow, sharpen or redirect it to match what the site can actually answer.</span></li>
+<li><span class="num">03</span><span class="txt"><strong>Accept the limitation.</strong> Proceed — but document the gap explicitly in your selection justification.</span></li>
+</ul>
+<div class="hint" style="margin-top:48px;">A normal part of the research process — not a failure. Question and datasite are <em class="em">co-developed</em> through iteration.</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Part II</div>
+<div class="pageno">21</div>
+</section>
+
+<section class="slide" data-label="Exercise">
+<div class="tophdr"><span>Exercise · 02</span><span class="rule-line"></span><span>Evaluate</span></div>
+<div class="frame" style="justify-content:center;">
+<div class="exercise">
+<div class="ex-label">Exercise · 02</div>
+<h3>Evaluate your datasite.</h3>
+<div class="body" style="max-width:1500px; margin-bottom: 32px;">
+        Apply all three questions to one of your candidate sites.
+    </div>
+<ul class="clean">
+<li><span class="num">Q1</span><span class="txt"><strong>Is this a good site?</strong> — relevance, activity, interactivity, diversity, richness.</span></li>
+<li><span class="num">Q2</span><span class="txt"><strong>Does it produce the right data?</strong> — text, relational, actor, activity.</span></li>
+<li><span class="num">Q3</span><span class="txt"><strong>Does it let you study what you want?</strong> Does your operationalisation hold?</span></li>
+</ul>
+<div class="hint" style="margin-top:32px;">Does the evaluation suggest your research question needs adjustment?</div>
+</div>
+</div>
+<div class="pageno-mark">Exercise 02</div>
+<div class="pageno">22</div>
+</section>
+
+<section class="slide" data-label="Orienting">
+<div class="tophdr"><span>Part II · Ethics</span><span class="rule-line"></span><span>Orienting</span></div>
+<div class="frame" style="flex-direction:row; gap: 90px; align-items:center;">
+<div style="flex: 1.1;">
+<span class="eyebrow" style="margin-bottom:20px; display:block;">Orienting to ethics in netnography</span>
+<h2 style="margin-bottom: 32px;">Netnography sits at<br/>the intersection.</h2>
+<div class="body" style="font-size:26px; max-width: 680px;">
+        Ethnographic research trouble <em class="em">and</em> social media research trouble meet here. The appropriate procedures depend on the specific combination of <strong>site</strong>, <strong>topic</strong> and <strong>design</strong>.
+    </div>
+</div>
+<div style="flex: 1.2; display:flex; flex-direction:column;">
+<div class="imgph" style="aspect-ratio: 5/4; padding: 24px;">
+<img alt="Kozinets Figure 6.2: Orienting to ethics in netnography" src="images/image.png" style="max-width:100%; max-height:100%; object-fit:contain; display:block;"/>
+</div>
+<div style="margin-top:20px; font-family:'JetBrains Mono',monospace; font-size:24px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted-2);">Fig. 6.2 — orienting to ethics</div>
+</div>
+</div>
+<div class="footnote">Kozinets, R.V. (2020). <em>Netnography</em>, Ch. 6, Fig. 6.2. SAGE.</div>
+<div class="pageno-mark">Part II · Ethics</div>
+<div class="pageno">23</div>
+</section>
+
+<section class="slide" data-label="Ethics">
+<div class="tophdr"><span>Part II · Ethics</span><span class="rule-line"></span><span>Considerations</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Ethical considerations in data selection</span>
+<h2>Ethics is continuous —<br/>not a box to check.</h2>
+</div>
+<div class="two-col" style="margin-top:10px; gap: 90px;">
+<div class="col-card">
+<div class="col-label">STAGES OF ETHICAL ATTENTION</div>
+<ol style="padding-left:22px; margin:0; font-family:'Source Serif 4', Georgia, serif; font-size: 26px; line-height: 1.7; color: var(--ink-2);">
+<li>Research question</li>
+<li style="color:var(--terra);"><strong>Data selection &amp; collection</strong> <span class="hint" style="font-size:24px;">— today's focus</span></li>
+<li>Data storage &amp; security</li>
+<li>Interpretation &amp; analysis</li>
+<li>Reporting &amp; representation</li>
+</ol>
+</div>
+<div class="col-card">
+<div class="col-label">KEY QUESTIONS · SELECTION</div>
+<ul class="bullets bullets-s">
+<li><strong>Public or private site?</strong> Technically public ≠ ethically unproblematic.</li>
+<li><strong>Contextual integrity</strong> <span class="hint">(Nissenbaum)</span> — would use violate informational expectations?</li>
+<li><strong>Explicit no-research policy?</strong> Respect it — ethically and practically.</li>
+<li><strong>Sensitive topic?</strong> Raises the stakes on all other considerations.</li>
+<li><strong>Vulnerable population?</strong> Heightened care even if content is public.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnote">Kozinets (2020), Ch. 6 · Nissenbaum, H. (2004). Privacy as contextual integrity. <em>Washington Law Review</em>, 79(1), 119–158.</div>
+<div class="pageno-mark">Part II · Ethics</div>
+<div class="pageno">24</div>
+</section>
+
+<section class="slide" data-label="Ethics">
+<div class="frame" style="justify-content:center; align-items:center; padding: 80px 100px;">
+<img alt="Research ethics process flowchart for netnography" src="images/image-1.png" style="max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block;"/>
+</div>
+<div class="pageno">25</div>
+</section>
+
+<section class="slide" data-label="Exercise">
+<div class="tophdr"><span>Exercise · 03</span><span class="rule-line"></span><span>Ethics</span></div>
+<div class="frame" style="justify-content:center;">
+<div class="exercise">
+<div class="ex-label">Exercise · 03</div>
+<h3>Ethics &amp; your datasite.</h3>
+<div class="body" style="max-width:1500px; margin-bottom: 32px;">Discuss in groups:</div>
+<ul class="bullets">
+<li>Is your site public or private? Does it have a no-research policy?</li>
+<li>Would using this data violate members' contextual expectations?</li>
+<li>Is the topic sensitive? Are participants potentially vulnerable?</li>
+</ul>
+<div class="body" style="margin-top:36px; padding-top:28px; border-top: 1px solid var(--rule);">
+        Work through the flowchart. What does it recommend for your site? <span class="hint">Note any ethical concerns for your Milestone 1 justification.</span>
+</div>
+</div>
+</div>
+<div class="pageno-mark">Exercise 03</div>
+<div class="pageno">26</div>
+</section>
+
+<section class="slide section-slide no-pageno" data-label="Section">
+<div class="numeral">III</div>
+<div class="frame">
+<div>
+<span class="eyebrow">Part Three</span>
+<h1 style="margin-top:28px;">From evaluation<br/>to <em>selection</em>.</h1>
+<div class="sub">Trade-offs, documentation, and the immersion journal.</div>
+</div>
+</div>
+</section>
+
+<section class="slide" data-label="How">
+<div class="tophdr"><span>Part III · Selection</span><span class="rule-line"></span><span>Deciding</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Selection</span>
+<h2>After scouting, evaluation<br/>and ethics — you decide.</h2>
+<div class="body" style="margin-top:28px; max-width:1500px;">Selection is rarely obvious. Four key questions:</div>
+</div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">01</span><span class="txt">Which site best fits your <strong>specific research question</strong> and analytical strategy?</span></li>
+<li><span class="num">02</span><span class="txt">Which site produces the <strong>data types</strong> your analysis actually requires?</span></li>
+<li><span class="num">03</span><span class="txt">Can you proceed <strong>ethically</strong>?</span></li>
+<li><span class="num">04</span><span class="txt">What are the <strong>trade-offs</strong> — what does this site not capture?</span></li>
+</ul>
+<div class="hint" style="margin-top:40px;">Often: a <em class="em">primary site</em> with explicit acknowledgment of what it does not capture. Sometimes a sequential multi-site design.</div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Part III</div>
+<div class="pageno">27</div>
+</section>
+
+<section class="slide" data-label="Documenting">
+<div class="tophdr"><span>Part III · Selection</span><span class="rule-line"></span><span>Documentation</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Document the decision</span>
+<h2>Not a note — a<br/>substantive explanation.</h2>
+</div>
+<div class="body" style="max-width:1500px; margin-bottom:24px;">A good selection justification includes:</div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">A</span><span class="txt">Why this site is a <strong>good case for your theoretical question</strong>.</span></li>
+<li><span class="num">B</span><span class="txt">What <strong>data</strong> it makes available, and in what form.</span></li>
+<li><span class="num">C</span><span class="txt">What its <strong>limitations</strong> are — and what they mean for your claims.</span></li>
+<li><span class="num">D</span><span class="txt">What <strong>ethical procedures</strong> you are following, and why.</span></li>
+</ul>
+<div style="margin-top:48px; padding: 24px 32px; border-left: 3px solid var(--terra); font-family:'Source Serif 4', Georgia, serif; font-size:28px; color: var(--ink-2); font-style:italic;">
+      This is precisely what you are writing for <span style="color:var(--terra); font-style:normal; font-weight:500;">Milestone 1</span>.
+  </div>
+</div>
+<div class="footnote"></div>
+<div class="pageno-mark">Part III</div>
+<div class="pageno">28</div>
+</section>
+
+<section class="slide" data-label="Immersion">
+<div class="tophdr"><span>Part III · Journal</span><span class="rule-line"></span><span>Record · Research · Reflect</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">The immersion journal</span>
+</div>
+<div class="three-col" style="margin-top: 40px;">
+<div class="col-card">
+<div class="col-label">01 · RECORD</div>
+<h4>Observe.</h4>
+<div class="body" style="font-size:24px; max-width:none;">Link, content, description, keywords. Screenshots and field notes go here.</div>
+</div>
+<div class="col-card">
+<div class="col-label">02 · RESEARCH</div>
+<h4>Connect.</h4>
+<div class="body" style="font-size:24px; max-width:none;">Tie observations to your research question and theoretical framework.</div>
+</div>
+<div class="col-card">
+<div class="col-label">03 · REFLECT</div>
+<h4>Attend.</h4>
+<div class="body" style="font-size:24px; max-width:none;">Your own reactions, assumptions, and interpretive moves. Track them.</div>
+</div>
+</div>
+<div class="hint" style="margin-top:70px;">Simultaneously a <em class="em">research record</em> and a <em class="em">reflective analytical space</em>. Start now — file your completed observational templates here.</div>
+</div>
+<div class="footnote">Kozinets, R.V. (2020). <em>Netnography</em>, Ch. 10. SAGE.</div>
+<div class="pageno-mark">Part III</div>
+<div class="pageno">29</div>
+</section>
+
+<section class="slide" data-label="Example">
+<div class="tophdr"><span>Part III · Journal</span><span class="rule-line"></span><span>Example</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Example journal entry</span>
+<h2>SurvivalistBoards.com.</h2>
+</div>
+<div class="journal" style="max-width: 1600px;">
+<div class="meta">DATE · SITE · VISIT</div>
+<div style="font-family:'Inter',sans-serif; font-size: 24px; color: var(--muted); margin-bottom: 22px; letter-spacing: 0.06em;">
+        [date]  ·  SurvivalistBoards.com, General Discussion  ·  45 min
+    </div>
+<p><span class="tag">Record</span> Active threads going back a decade; posts from today. Thread "urban vs. rural bugging out" — 90+ replies, members cite specific personal experience and geography. High word count; extended first-person narratives common.</p>
+<p><span class="tag">Research</span> Strong potential for studying <em>identity work</em>. Urban/rural variation is useful for the diversity criterion. Thread on media misrepresentation suggests stigma awareness — relevant to social movement literature.</p>
+<p><span class="tag">Reflect</span> My initial assumption was that prepper forums would be dominated by political extremism. This thread is pragmatic and technical. I should not let that expectation shape which threads I treat as typical.</p>
+</div>
+</div>
+<div class="footnote">Adapted from </div>
+<div class="pageno-mark">Example</div>
+<div class="pageno">30</div>
+</section>
+
+<section class="slide" data-label="Journal">
+<div class="tophdr"><span>Part III · Journal</span><span class="rule-line"></span><span>Practical tips</span></div>
+<div class="frame">
+<div class="page-head">
+<span class="eyebrow">Practical tips</span>
+<h2>Discipline the journal<br/>from day one.</h2>
+</div>
+<ul class="clean" style="max-width:1700px;">
+<li><span class="num">01</span><span class="txt">Set aside time for immersion <strong>systematically</strong> — don't leave it to chance.</span></li>
+<li><span class="num">02</span><span class="txt">Organise every entry: <strong>link, content, description, keywords</strong>.</span></li>
+<li><span class="num">03</span><span class="txt">Use templates for different tasks — site evaluation, actor analysis, temporal analysis.</span></li>
+<li><span class="num">04</span><span class="txt">File completed observational templates in the journal.</span></li>
+<li><span class="num">05</span><span class="txt">Record your <strong>site selection decision</strong> here — this becomes your Milestone 1 draft.</span></li>
+</ul>
+</div>
+<div class="footnote">Kozinets, R.V. (2020). <em>Netnography</em>, Ch. 10. SAGE.</div>
+<div class="pageno-mark">Part III</div>
+<div class="pageno">31</div>
+</section>
+
+<section class="slide dark" data-label="Milestone">
+<div class="tophdr"><span>Deliverable</span><span class="rule-line"></span><span>Milestone 01</span></div>
+<div class="frame">
+<div style="display:grid; grid-template-columns: 1fr 1.1fr; gap: 100px; align-items:center; height:100%;">
+<div>
+<div style="font-family:'Inter',sans-serif; font-size:24px; letter-spacing: 0.28em; text-transform:uppercase; font-weight: 600; color: var(--terra-soft); margin-bottom: 28px;">Milestone · 01</div>
+<div style="font-family:'Source Serif 4', Georgia, serif; font-size: 110px; font-weight: 300; line-height: 1; letter-spacing: -0.025em; color: #f4eed9;">Due<br/>24/04<br/>23:59</div>
+<div style="margin-top: 40px; font-family:'JetBrains Mono',monospace; font-size: 24px; color: var(--terra-soft); letter-spacing: 0.1em;">HAND IN TO YOUR TA · 1–2 PAGES</div>
+</div>
+<div>
+<ul class="clean" style="border-color: rgba(255,255,255,0.12);">
+<li style="border-top-color: rgba(255,255,255,0.15);"><span class="num" style="color: var(--terra-soft);">01</span><span class="txt" style="color: rgba(236,229,211,0.9);"><strong style="color:#f4eed9; font-family:'Source Serif 4',Georgia,serif; font-weight:500; font-size:34px;">Research topic &amp; question</strong><br/><span style="font-size:24px; color:rgba(236,229,211,0.65);">With justification.</span></span></li>
+<li style="border-top-color: rgba(255,255,255,0.15); border-bottom-color: rgba(255,255,255,0.15);"><span class="num" style="color: var(--terra-soft);">02</span><span class="txt" style="color: rgba(236,229,211,0.9);"><strong style="color:#f4eed9; font-family:'Source Serif 4',Georgia,serif; font-weight:500; font-size:34px;">Central datasite(s)</strong><br/><span style="font-size:24px; color:rgba(236,229,211,0.65);">Quality criteria, available data types, ethics, trade-offs.</span></span></li>
+</ul>
+<div style="margin-top: 48px; font-family:'Source Serif 4', Georgia, serif; font-size: 26px; font-style: italic; color: rgba(236,229,211,0.7); line-height:1.5;">
+          The immersion journal is the raw material. The milestone is the<br/>written-up selection decision.
+      </div>
+</div>
+</div>
+</div>
+<div class="pageno-mark">Milestone 01</div>
+<div class="pageno">32</div>
+</section>
+
+<section class="slide section-slide no-pageno" data-label="Next">
+<div class="frame" style="justify-content:space-between; padding-top:140px; padding-bottom:140px;">
+<div>
+<span class="eyebrow">Next lecture</span>
+<div style="font-family:'JetBrains Mono',monospace; font-size:24px; color: var(--terra-soft); letter-spacing: 0.1em; margin-top: 24px;">LECTURE 04 · 28 APRIL</div>
+</div>
+<div>
+<h1 style="font-size:160px; max-width:1600px;">Data <em>design</em><br/>&amp; data collection.</h1>
+</div>
+<div style="display:flex; justify-content:space-between; align-items:flex-end; color: rgba(236,229,211,0.6); font-family:'Inter',sans-serif; font-size:24px;">
+<div>Bring your Milestone 1 draft.</div>
+<div style="font-family:'JetBrains Mono',monospace; letter-spacing: 0.1em; text-transform: uppercase;">— fin —</div>
+</div>
+</div>
+</section>
+</deck-stage>
+</body>
+</html>
